@@ -6,7 +6,7 @@ import pkg from './package.json';
 
 export default {
   external: [...builtinModules, ...Object.keys(pkg.dependencies)],
-  input: 'src/loadConfig.js',
+  input: 'src/index.js',
   output: {file: pkg.main, format: 'cjs', sourcemap: true},
   plugins: [
     flow({
