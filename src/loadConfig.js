@@ -7,10 +7,7 @@ import objectMap from 'object.map';
 import pProps from 'p-props';
 import ConfigError from './ConfigError';
 import loadGroup from './loadGroup';
-import type {ConfigGroup, ConfigMap} from './types';
-
-type ExtractConfig = <GMap: ConfigGroup>(GMap) => $ObjMap<GMap, () => ?string>;
-export type Config<CMap: ConfigMap> = $ObjMap<CMap, ExtractConfig>;
+import type {Config, ConfigMap} from './types';
 
 export default function loadConfig<CMap: ConfigMap>(
   configMap: CMap,
