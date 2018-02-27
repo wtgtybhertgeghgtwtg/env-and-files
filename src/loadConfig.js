@@ -10,10 +10,11 @@ import loadGroup from './loadGroup';
 import type {ConfigGroup, ConfigMap} from './types';
 
 type ExtractConfig = <GMap: ConfigGroup>(GMap) => $ObjMap<GMap, () => ?string>;
+export type Config<CMap: ConfigMap> = $ObjMap<CMap, ExtractConfig>;
 
 export default function loadConfig<CMap: ConfigMap>(
   configMap: CMap,
-): Promise<$ObjMap<CMap, ExtractConfig>> {
+): Promise<Config<CMap>> {
   assert(isobject(configMap), '"configMap" must be a ConfigMap object.');
   const mappedObject = objectMap(configMap, loadGroup);
   return pProps(mappedObject).then(result => {
