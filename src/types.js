@@ -20,13 +20,11 @@ export type ConfigResult<CMap: ConfigMap> = {
 };
 
 export type EnvironmentConfig = {
-  defaultValue?: string,
   required?: boolean,
   variableName: string,
 };
 
 export type FileConfig = {
-  defaultValue?: string,
   encoding?: buffer$Encoding,
   filePath: string,
   required?: boolean,

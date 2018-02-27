@@ -2,14 +2,14 @@
 import type {EnvironmentConfig} from './types';
 
 export default function loadEnvironmentConfig(property: EnvironmentConfig) {
-  const {defaultValue = null, required = false, variableName} = property;
+  const {required = false, variableName} = property;
 
-  // '' is falsey, so `process.env[variableName] || defaultValue` would not behave right when the variable is set to ''.
+  // '' is falsey, so `process.env[variableName] || null` would not behave right when the variable is set to ''.
   let config = process.env[variableName];
 
-  // `process.env[variableName] ?? defaultValue`, on the other hand.
+  // `process.env[variableName] ?? null`, on the other hand.
   if (typeof config !== 'string') {
-    config = defaultValue;
+    config = null;
   }
 
   const error =

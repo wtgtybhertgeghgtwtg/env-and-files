@@ -9,19 +9,11 @@ const readFileAsync: (
 ) => Promise<?string> = pify(readFile);
 
 export default function loadFileConfig(property: FileConfig) {
-  const {
-    defaultValue = null,
-    encoding = 'utf8',
-    filePath,
-    required = false,
-  } = property;
+  const {encoding = 'utf8', filePath, required = false} = property;
 
   // $FlowFixMe
   return readFileAsync(filePath, encoding).then(
     config => ({config, error: null}),
-    (error: Error) =>
-      required && defaultValue === null
-        ? {config: null, error}
-        : {config: defaultValue, error: null},
+    (error: Error) => ({config: null, error: required ? error : null}),
   );
 }
