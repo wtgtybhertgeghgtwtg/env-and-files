@@ -13,7 +13,7 @@ export default function resolveConfig<CMap: ConfigMap>(
   pProps(loadedConfig).then(result => {
     const config = objectMap(result, prop => prop.config);
     const errors = arrFlatten(collectionMap(result, prop => prop.errors));
-    const error = errors.length > 0 ? new ConfigError(config, errors) : null;
+    const error = errors.length > 0 ? new ConfigError(errors) : null;
     callback(error, config);
   });
 }
