@@ -1,26 +1,35 @@
 // @flow
-import arrFlatten from 'arr-flatten';
+/* eslint-disable no-redeclare */
 import assert from 'assert';
-import collectionMap from 'collection-map';
 import isobject from 'isobject';
 import objectMap from 'object.map';
-import pProps from 'p-props';
+import pify from 'pify';
 import ConfigError from './ConfigError';
 import loadGroup from './loadGroup';
+import resolveConfig from './resolveConfig';
 import type {Config, ConfigMap} from './types';
+
+const pifyResolveConfig = pify(resolveConfig);
+
+declare function loadConfig<CMap: ConfigMap>(
+  configMap: CMap,
+): Promise<Config<CMap>>;
+declare function loadConfig<CMap: ConfigMap>(
+  configMap: CMap,
+  callback: (error: ?ConfigError<CMap>, config: Config<CMap>) => void,
+): void;
 
 export default function loadConfig<CMap: ConfigMap>(
   configMap: CMap,
-): Promise<Config<CMap>> {
+  callback?: (error: ?ConfigError<CMap>, config: Config<CMap>) => void,
+) {
   assert(isobject(configMap), '"configMap" must be a ConfigMap object.');
+  assert(
+    typeof callback === 'undefined' || typeof callback === 'function',
+    '"callback" must be a function or undefined.',
+  );
   const mappedObject = objectMap(configMap, loadGroup);
-  return pProps(mappedObject).then(result => {
-    const config = objectMap(result, prop => prop.config);
-    const errors = arrFlatten(collectionMap(result, prop => prop.errors));
-    if (errors.length === 0) {
-      return config;
-    }
-    const error = new ConfigError(config, errors);
-    return Promise.reject(error);
-  });
+  return callback
+    ? resolveConfig(mappedObject, callback)
+    : pifyResolveConfig(mappedObject);
 }

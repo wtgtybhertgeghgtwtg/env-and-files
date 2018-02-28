@@ -75,12 +75,29 @@ describe('loadConfig', () => {
         'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
       );
     });
+
+    it('throws if "callback" is not a a function or undefined.', () => {
+      // $FlowFixMe
+      expect(() => loadConfig({}, 'Neither a function nor undefined.')).toThrow(
+        '"callback" must be a function or undefined.',
+      );
+    });
   });
 
-  it('can load empty groups.', async () => {
-    const config = await loadConfig({groupOne: {}});
+  describe('loading empty groups', () => {
+    it('works with the Promise interface.', async () => {
+      const config = await loadConfig({groupOne: {}});
 
-    expect(config.groupOne).toEqual({});
+      expect(config.groupOne).toEqual({});
+    });
+
+    it('works with the callback interface.', done => {
+      loadConfig({groupOne: {}}, (error, config) => {
+        expect(error).toBeNull();
+        expect(config.groupOne).toEqual({});
+        done();
+      });
+    });
   });
 
   describe('loading environmental variables', () => {
@@ -93,20 +110,40 @@ describe('loadConfig', () => {
         process.env[variableName] = variableValue;
       });
 
-      it('equals the environmental variable.', async () => {
-        const config = await loadConfig({
-          groupOne: {propOne: {variableName}},
+      describe('with the Promise interface', () => {
+        it('equals the environmental variable.', async () => {
+          const config = await loadConfig({
+            groupOne: {propOne: {variableName}},
+          });
+
+          expect(config.groupOne.propOne).toEqual(variableValue);
         });
 
-        expect(config.groupOne.propOne).toEqual(variableValue);
+        it('equals the environmental variable (using shorthand syntax).', async () => {
+          const config = await loadConfig({
+            groupOne: {propOne: variableName},
+          });
+
+          expect(config.groupOne.propOne).toEqual(variableValue);
+        });
       });
 
-      it('equals the environmental variable (using shorthand syntax).', async () => {
-        const config = await loadConfig({
-          groupOne: {propOne: variableName},
+      describe('with the callback interface', () => {
+        it('equals the environmental variable.', done => {
+          loadConfig({groupOne: {propOne: {variableName}}}, (error, config) => {
+            expect(error).toBeNull();
+            expect(config.groupOne.propOne).toEqual(variableValue);
+            done();
+          });
         });
 
-        expect(config.groupOne.propOne).toEqual(variableValue);
+        it('equals the environmental variable (using shorthand syntax).', done => {
+          loadConfig({groupOne: {propOne: variableName}}, (error, config) => {
+            expect(error).toBeNull();
+            expect(config.groupOne.propOne).toEqual(variableValue);
+            done();
+          });
+        });
       });
     });
 
@@ -115,41 +152,82 @@ describe('loadConfig', () => {
         delete process.env[variableName];
       });
 
-      it('equals null.', async () => {
-        const config = await loadConfig({
-          groupOne: {propOne: {variableName}},
+      describe('with the Promise interface', () => {
+        it('equals null.', async () => {
+          const config = await loadConfig({
+            groupOne: {propOne: {variableName}},
+          });
+
+          expect(config.groupOne.propOne).toBeNull();
         });
 
-        expect(config.groupOne.propOne).toBeNull();
+        it('equals null if using shorthand syntax.', async () => {
+          const config = await loadConfig({
+            groupOne: {propOne: variableName},
+          });
+
+          expect(config.groupOne.propOne).toBeNull();
+        });
+
+        it('rejects if required.', async () => {
+          const configPromise = loadConfig({
+            groupOne: {propOne: {required: true, variableName}},
+          });
+          await expect(configPromise).rejects.toThrow(
+            'Configuration could not be loaded.',
+          );
+
+          // $FlowFixMe
+          const error: $ConfigError<any> = await configPromise.catch(
+            err => err,
+          );
+
+          expect(error).toBeInstanceOf(Error);
+          expect(error.config.groupOne.propOne).toBeNull();
+          expect(error.message).toEqual('Configuration could not be loaded.');
+
+          const {errors} = error;
+          expect(errors.length).toBe(1);
+          expect(errors[0]).toBeInstanceOf(Error);
+          expect(errors[0].message).toEqual('PROP_ONE is not defined.');
+        });
       });
 
-      it('equals null if using shorthand syntax.', async () => {
-        const config = await loadConfig({
-          groupOne: {propOne: variableName},
+      describe('with the callback interface', () => {
+        it('equals null.', done => {
+          loadConfig({groupOne: {propOne: {variableName}}}, (error, config) => {
+            expect(error).toBeNull();
+            expect(config.groupOne.propOne).toBeNull();
+            done();
+          });
         });
 
-        expect(config.groupOne.propOne).toBeNull();
-      });
-
-      it('rejects if required.', async () => {
-        const configPromise = loadConfig({
-          groupOne: {propOne: {required: true, variableName}},
+        it('equals null if using shorthand syntax.', () => {
+          loadConfig({groupOne: {propOne: variableName}}, (error, config) => {
+            expect(error).toBeNull();
+            expect(config.groupOne.propOne).toBeNull();
+          });
         });
-        await expect(configPromise).rejects.toThrow(
-          'Configuration could not be loaded.',
-        );
 
-        // $FlowFixMe
-        const error: $ConfigError<any> = await configPromise.catch(err => err);
+        it('gives an error if required.', done => {
+          loadConfig(
+            {groupOne: {propOne: {required: true, variableName}}},
+            (error, config) => {
+              expect(error).toBeInstanceOf(Error);
+              expect(config.groupOne.propOne).toBeNull();
+              // $FlowFixMe
+              expect(error.message).toEqual(
+                'Configuration could not be loaded.',
+              );
 
-        expect(error).toBeInstanceOf(ConfigError);
-        expect(error.config.groupOne.propOne).toBeNull();
-        expect(error.message).toEqual('Configuration could not be loaded.');
-
-        const {errors} = error;
-        expect(errors.length).toBe(1);
-        expect(errors[0]).toBeInstanceOf(Error);
-        expect(errors[0].message).toEqual('PROP_ONE is not defined.');
+              const {errors} = error || {};
+              expect(errors.length).toBe(1);
+              expect(errors[0]).toBeInstanceOf(Error);
+              expect(errors[0].message).toEqual('PROP_ONE is not defined.');
+              done();
+            },
+          );
+        });
       });
     });
   });
@@ -160,36 +238,73 @@ describe('loadConfig', () => {
     describe('when the file is present', () => {
       const fileContent = 'The first property.';
 
-      it('equals the file content decoded as UTF-8 if no encoding is defined.', async () => {
-        // $FlowFixMe
-        fs.__setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
+      describe('with the Promise interface', () => {
+        it('equals the file content decoded as UTF-8 if no encoding is defined.', async () => {
+          // $FlowFixMe
+          fs.__setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
-        const config = await loadConfig({
-          groupOne: {propOne: {filePath}},
+          const config = await loadConfig({
+            groupOne: {propOne: {filePath}},
+          });
+
+          expect(config.groupOne.propOne).toEqual(fileContent);
+          expect(fs.readFile).toHaveBeenCalledWith(
+            filePath,
+            'utf8',
+            expect.anything(),
+          );
         });
 
-        expect(config.groupOne.propOne).toEqual(fileContent);
-        expect(fs.readFile).toHaveBeenCalledWith(
-          filePath,
-          'utf8',
-          expect.anything(),
-        );
+        it('equals the file content decoded using the given encoding, if defined.', async () => {
+          // $FlowFixMe
+          fs.__setFiles({[filePath]: Buffer.from(fileContent, 'ascii')});
+
+          const config = await loadConfig({
+            groupOne: {propOne: {encoding: 'ascii', filePath}},
+          });
+
+          expect(config.groupOne.propOne).toEqual(fileContent);
+          expect(fs.readFile).toHaveBeenCalledWith(
+            filePath,
+            'ascii',
+            expect.anything(),
+          );
+        });
       });
 
-      it('equals the file content decoded using the given encoding, if defined.', async () => {
-        // $FlowFixMe
-        fs.__setFiles({[filePath]: Buffer.from(fileContent, 'ascii')});
+      describe('with the callback interface', () => {
+        it('equals the file content decoded as UTF-8 if no encoding is defined.', done => {
+          // $FlowFixMe
+          fs.__setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
-        const config = await loadConfig({
-          groupOne: {propOne: {encoding: 'ascii', filePath}},
+          loadConfig({groupOne: {propOne: {filePath}}}, (error, config) => {
+            expect(config.groupOne.propOne).toEqual(fileContent);
+            expect(fs.readFile).toHaveBeenCalledWith(
+              filePath,
+              'utf8',
+              expect.anything(),
+            );
+            done();
+          });
         });
 
-        expect(config.groupOne.propOne).toEqual(fileContent);
-        expect(fs.readFile).toHaveBeenCalledWith(
-          filePath,
-          'ascii',
-          expect.anything(),
-        );
+        it('equals the file content decoded using the given encoding, if defined.', done => {
+          // $FlowFixMe
+          fs.__setFiles({[filePath]: Buffer.from(fileContent, 'ascii')});
+
+          loadConfig(
+            {groupOne: {propOne: {encoding: 'ascii', filePath}}},
+            (error, config) => {
+              expect(config.groupOne.propOne).toEqual(fileContent);
+              expect(fs.readFile).toHaveBeenCalledWith(
+                filePath,
+                'ascii',
+                expect.anything(),
+              );
+              done();
+            },
+          );
+        });
       });
     });
 
@@ -199,31 +314,61 @@ describe('loadConfig', () => {
         fs.__setFiles({});
       });
 
-      it('equals null.', async () => {
-        const config = await loadConfig({
-          groupOne: {propOne: {filePath}},
+      describe('with the Promise interface', () => {
+        it('equals null.', async () => {
+          const config = await loadConfig({
+            groupOne: {propOne: {filePath}},
+          });
+
+          expect(config.groupOne.propOne).toBeNull();
         });
 
-        expect(config.groupOne.propOne).toBeNull();
+        it('rejects if required.', async () => {
+          const configPromise = loadConfig({
+            groupOne: {propOne: {filePath, required: true}},
+          });
+          await expect(configPromise).rejects.toThrow(
+            'Configuration could not be loaded.',
+          );
+          // $FlowFixMe
+          const error: ConfigError<any> = await configPromise.catch(err => err);
+
+          expect(error).toBeInstanceOf(Error);
+          expect(error.config.groupOne.propOne).toBeNull();
+          expect(error.message).toEqual('Configuration could not be loaded.');
+
+          const {errors} = error;
+          expect(errors.length).toBe(1);
+          expect(errors[0]).toBeInstanceOf(Error);
+        });
       });
 
-      it('rejects if required.', async () => {
-        const configPromise = loadConfig({
-          groupOne: {propOne: {filePath, required: true}},
+      describe('with the callback interface', () => {
+        it('equals null.', done => {
+          loadConfig({groupOne: {propOne: {filePath}}}, (error, config) => {
+            expect(error).toBeNull();
+            expect(config.groupOne.propOne).toBeNull();
+            done();
+          });
         });
-        await expect(configPromise).rejects.toThrow(
-          'Configuration could not be loaded.',
-        );
-        // $FlowFixMe
-        const error: ConfigError<any> = await configPromise.catch(err => err);
 
-        expect(error).toBeInstanceOf(ConfigError);
-        expect(error.config.groupOne.propOne).toBeNull();
-        expect(error.message).toEqual('Configuration could not be loaded.');
+        it('gives an error if required.', () => {
+          loadConfig(
+            {groupOne: {propOne: {filePath, required: true}}},
+            (error, config) => {
+              expect(error).toBeInstanceOf(Error);
+              expect(config.groupOne.propOne).toBeNull();
+              // $FlowFixMe
+              expect(error.message).toEqual(
+                'Configuration could not be loaded.',
+              );
 
-        const {errors} = error;
-        expect(errors.length).toBe(1);
-        expect(errors[0]).toBeInstanceOf(Error);
+              const {errors} = error || {};
+              expect(errors.length).toBe(1);
+              expect(errors[0]).toBeInstanceOf(Error);
+            },
+          );
+        });
       });
     });
   });

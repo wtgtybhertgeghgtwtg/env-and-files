@@ -1,22 +1,28 @@
 // @flow
 /* eslint-disable no-use-before-define */
+import type ConfigError from './ConfigError';
 
 export type Config<CMap: ConfigMap> = $ObjMap<
   CMap,
   <GMap: ConfigGroup>(GMap) => $ObjMap<GMap, () => ?string>,
 >;
 
+export type ConfigCallback<CMap: ConfigMap> = (
+  error: ?ConfigError<CMap>,
+  config: Config<CMap>,
+) => void;
+
 export type ConfigGroup = {
-  [key: string]: string | EnvironmentConfig | FileConfig,
+  [property: string]: string | EnvironmentConfig | FileConfig,
 };
 
 export type ConfigMap = {
   [group: string]: ConfigGroup,
 };
 
-export type ConfigResult<CMap: ConfigMap> = {
-  config: Config<CMap>,
-  error?: Error,
+export type ConfigResult = {
+  config: ?string,
+  error: ?Error,
 };
 
 export type EnvironmentConfig = {
@@ -29,3 +35,10 @@ export type FileConfig = {
   filePath: string,
   required?: boolean,
 };
+
+export type LoadedConfig<CMap: ConfigMap> = $ObjMap<
+  CMap,
+  <GMap: ConfigGroup>(
+    GMap,
+  ) => $ObjMap<GMap, () => ConfigResult | Promise<ConfigResult>>,
+>;
