@@ -8,7 +8,7 @@ export type Config<CMap: ConfigMap> = $ObjMap<
 >;
 
 export type ConfigCallback<CMap: ConfigMap> = (
-  error: ?ConfigError<CMap>,
+  error: ?ConfigError,
   config: Config<CMap>,
 ) => void;
 

@@ -16,12 +16,12 @@ declare function loadConfig<CMap: ConfigMap>(
 ): Promise<Config<CMap>>;
 declare function loadConfig<CMap: ConfigMap>(
   configMap: CMap,
-  callback: (error: ?ConfigError<CMap>, config: Config<CMap>) => void,
+  callback: (error: ?ConfigError, config: Config<CMap>) => void,
 ): void;
 
 export default function loadConfig<CMap: ConfigMap>(
   configMap: CMap,
-  callback?: (error: ?ConfigError<CMap>, config: Config<CMap>) => void,
+  callback?: (error: ?ConfigError, config: Config<CMap>) => void,
 ) {
   assert(isobject(configMap), '"configMap" must be a ConfigMap object.');
   assert(

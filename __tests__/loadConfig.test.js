@@ -178,12 +178,9 @@ describe('loadConfig', () => {
           );
 
           // $FlowFixMe
-          const error: $ConfigError<any> = await configPromise.catch(
-            err => err,
-          );
+          const error: ConfigError = await configPromise.catch(err => err);
 
           expect(error).toBeInstanceOf(Error);
-          expect(error.config.groupOne.propOne).toBeNull();
           expect(error.message).toEqual('Configuration could not be loaded.');
 
           const {errors} = error;
@@ -331,10 +328,9 @@ describe('loadConfig', () => {
             'Configuration could not be loaded.',
           );
           // $FlowFixMe
-          const error: ConfigError<any> = await configPromise.catch(err => err);
+          const error: ConfigError = await configPromise.catch(err => err);
 
           expect(error).toBeInstanceOf(Error);
-          expect(error.config.groupOne.propOne).toBeNull();
           expect(error.message).toEqual('Configuration could not be loaded.');
 
           const {errors} = error;
