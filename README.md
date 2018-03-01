@@ -46,13 +46,38 @@ loadConfig({
     console.log(error);
   },
 );
+
+// Alternatively, using a callback.
+loadConfig(
+  {
+    logger: {
+      level: 'LOG_LEVEL',
+    },
+    server: {
+      port: {
+        required: true,
+        variableName: 'PORT',
+      },
+    },
+    sql: {
+      password: {
+        filePath: '/path/to/secret',
+        required: true,
+      },
+    },
+  },
+  (error, config) => {
+    // "config" will be provided whether or not there is an error.
+    console.log(config);
+  },
+);
 ```
 
 ## API
 
-### loadConfig(configMap)
+### loadConfig(configMap, callback?)
 
-Returns a `Promise` that is fulfilled when all configuration properties in `configMap` are loaded. The fulfilled value is an object map containing the loaded configuration properties. If a required property could not be loaded, the Promise will reject.
+If `callback` is not defined, returns a `Promise` that is fulfilled once all configuration properties in `configMap` are loaded. The fulfilled value is an object map containing the loaded configuration properties. If a required property could not be loaded, the Promise will reject. If `callback` is defined, it will be called with an error (if any) and the loaded configuration properties.
 
 ## License
 
