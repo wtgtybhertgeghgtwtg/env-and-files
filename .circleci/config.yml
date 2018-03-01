@@ -59,6 +59,9 @@ workflows:
       - lint
       - test
       - release:
+          filters:
+            branches:
+              only: master
           requires:
             - lint
             - test
