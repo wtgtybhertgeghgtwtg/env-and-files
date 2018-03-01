@@ -51,7 +51,7 @@
     "src"
   ],
   "license": "MIT",
-  "main": "dist/loadConfig.js",
+  "main": "dist/index.js",
   "name": "env-and-files",
   "repository": {
     "type": "git",
