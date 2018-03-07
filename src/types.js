@@ -25,16 +25,16 @@ export type ConfigResult = {
   error: ?Error,
 };
 
-export type EnvironmentConfig = {
+export type EnvironmentConfig = {|
   required?: boolean,
   variableName: string,
-};
+|};
 
-export type FileConfig = {
+export type FileConfig = {|
   encoding?: buffer$Encoding,
   filePath: string,
   required?: boolean,
-};
+|};
 
 export type LoadedConfig<CMap: ConfigMap> = $ObjMap<
   CMap,
