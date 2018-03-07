@@ -14,6 +14,6 @@ export default function loadFileConfig(property: FileConfig) {
   // $FlowFixMe
   return readFileAsync(filePath, encoding).then(
     config => ({config, error: null}),
-    (error: Error) => ({config: null, error: required ? error : null}),
+    (error: Error) => ({config: undefined, error: required ? error : null}),
   );
 }

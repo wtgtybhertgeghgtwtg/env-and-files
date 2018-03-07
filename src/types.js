@@ -4,7 +4,7 @@ import type ConfigError from './ConfigError';
 
 export type Config<CMap: ConfigMap> = $ObjMap<
   CMap,
-  <GMap: ConfigGroup>(GMap) => $ObjMap<GMap, () => ?string>,
+  <GMap: ConfigGroup>(GMap) => $ObjMap<GMap, () => string | void>,
 >;
 
 export type ConfigCallback<CMap: ConfigMap> = (
@@ -21,7 +21,7 @@ export type ConfigMap = {
 };
 
 export type ConfigResult = {
-  config: ?string,
+  config: string | void,
   error: ?Error,
 };
 

@@ -153,20 +153,20 @@ describe('loadConfig', () => {
       });
 
       describe('with the Promise interface', () => {
-        it('equals null.', async () => {
+        it('is undefined.', async () => {
           const config = await loadConfig({
             groupOne: {propOne: {variableName}},
           });
 
-          expect(config.groupOne.propOne).toBeNull();
+          expect(config.groupOne.propOne).toBeUndefined();
         });
 
-        it('equals null if using shorthand syntax.', async () => {
+        it('is undefined if using shorthand syntax.', async () => {
           const config = await loadConfig({
             groupOne: {propOne: variableName},
           });
 
-          expect(config.groupOne.propOne).toBeNull();
+          expect(config.groupOne.propOne).toBeUndefined();
         });
 
         it('rejects if required.', async () => {
@@ -191,18 +191,18 @@ describe('loadConfig', () => {
       });
 
       describe('with the callback interface', () => {
-        it('equals null.', done => {
+        it('is undefined.', done => {
           loadConfig({groupOne: {propOne: {variableName}}}, (error, config) => {
             expect(error).toBeNull();
-            expect(config.groupOne.propOne).toBeNull();
+            expect(config.groupOne.propOne).toBeUndefined();
             done();
           });
         });
 
-        it('equals null if using shorthand syntax.', () => {
+        it('is undefined if using shorthand syntax.', () => {
           loadConfig({groupOne: {propOne: variableName}}, (error, config) => {
             expect(error).toBeNull();
-            expect(config.groupOne.propOne).toBeNull();
+            expect(config.groupOne.propOne).toBeUndefined();
           });
         });
 
@@ -211,7 +211,7 @@ describe('loadConfig', () => {
             {groupOne: {propOne: {required: true, variableName}}},
             (error, config) => {
               expect(error).toBeInstanceOf(Error);
-              expect(config.groupOne.propOne).toBeNull();
+              expect(config.groupOne.propOne).toBeUndefined();
               // $FlowFixMe
               expect(error.message).toEqual(
                 'Configuration could not be loaded.',
@@ -312,12 +312,12 @@ describe('loadConfig', () => {
       });
 
       describe('with the Promise interface', () => {
-        it('equals null.', async () => {
+        it('is undefined.', async () => {
           const config = await loadConfig({
             groupOne: {propOne: {filePath}},
           });
 
-          expect(config.groupOne.propOne).toBeNull();
+          expect(config.groupOne.propOne).toBeUndefined();
         });
 
         it('rejects if required.', async () => {
@@ -340,10 +340,10 @@ describe('loadConfig', () => {
       });
 
       describe('with the callback interface', () => {
-        it('equals null.', done => {
+        it('is undefined.', done => {
           loadConfig({groupOne: {propOne: {filePath}}}, (error, config) => {
             expect(error).toBeNull();
-            expect(config.groupOne.propOne).toBeNull();
+            expect(config.groupOne.propOne).toBeUndefined();
             done();
           });
         });
@@ -353,7 +353,7 @@ describe('loadConfig', () => {
             {groupOne: {propOne: {filePath, required: true}}},
             (error, config) => {
               expect(error).toBeInstanceOf(Error);
-              expect(config.groupOne.propOne).toBeNull();
+              expect(config.groupOne.propOne).toBeUndefined();
               // $FlowFixMe
               expect(error.message).toEqual(
                 'Configuration could not be loaded.',
