@@ -64,8 +64,8 @@ describe('loadConfig', () => {
     });
 
     it('throws if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.', () => {
-      // $FlowFixMe
       expect(() =>
+        // $FlowFixMe
         loadConfig({
           groupOne: {
             propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
