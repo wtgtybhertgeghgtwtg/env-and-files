@@ -1,7 +1,7 @@
 // @flow
 import fs from 'fs';
 import ConfigError from '../src/ConfigError';
-import loadConfig from '../src/loadConfig';
+import loadConfig from '../src';
 
 jest.mock('fs');
 
