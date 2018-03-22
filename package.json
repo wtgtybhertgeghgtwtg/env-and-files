@@ -38,7 +38,8 @@
     "rimraf": "^2.6.2",
     "rollup": "^0.57.0",
     "rollup-plugin-babel": "^4.0.0-beta.2",
-    "rollup-plugin-flow": "^1.1.1"
+    "rollup-plugin-closure-compiler-js": "^1.0.6",
+    "rollup-plugin-prettier": "^0.4.0"
   },
   "engines": {
     "node": ">=4"
