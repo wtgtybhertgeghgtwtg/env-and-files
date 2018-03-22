@@ -1,7 +1,8 @@
 // @flow
 import builtinModules from 'builtin-modules';
 import babel from 'rollup-plugin-babel';
-import flow from 'rollup-plugin-flow';
+import closureCompilerJs from 'rollup-plugin-closure-compiler-js';
+import prettier from 'rollup-plugin-prettier';
 import pkg from './package.json';
 
 export default {
@@ -9,9 +10,17 @@ export default {
   input: 'src/index.js',
   output: {file: pkg.main, format: 'cjs', sourcemap: true},
   plugins: [
-    flow({
-      pretty: true,
-    }),
     babel(),
+    closureCompilerJs({
+      applyInputSourceMaps: false,
+      assumeFunctionWrapper: true,
+      compilationLevel: 'SIMPLE',
+      env: 'CUSTOM',
+      languageOut: 'ECMASCRIPT6_STRICT',
+      processCommonJsModules: false,
+      renaming: false,
+      useTypesForOptimization: false,
+    }),
+    prettier(),
   ],
 };
