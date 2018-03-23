@@ -12,7 +12,7 @@
     "isobject": "^3.0.1",
     "object.map": "^1.0.1",
     "p-props": "^1.1.0",
-    "pify": "^3.0.0"
+    "universalify": "^0.1.1"
   },
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {

@@ -1,86 +1,204 @@
 // @flow
 import fs from 'fs';
-import ConfigError from '../src/ConfigError';
-import loadConfig from '../src';
+import loadConfig, {type ConfigError} from '../src';
 
 jest.mock('fs');
 
 describe('loadConfig', () => {
   describe('invariants', () => {
-    it('throws if "configMap" is undefined.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig()).toThrow(
-        '"configMap" must be a ConfigMap object.',
-      );
-    });
+    describe('with the callback interface', () => {
+      function harness(configMap: any, message: string) {
+        return done =>
+          loadConfig(configMap, error => {
+            // $FlowFixMe
+            expect(error.message).toEqual(message);
+            done();
+          });
+      }
 
-    it('throws if "configMap" is not an object.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig('Not an object.')).toThrow(
-        '"configMap" must be a ConfigMap object.',
+      it(
+        'gives an error if "configMap" is undefined.',
+        harness(undefined, '"configMap" must be a ConfigMap object.'),
       );
-    });
 
-    it('throws if "configMap" is null.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig(null)).toThrow(
-        '"configMap" must be a ConfigMap object.',
+      it(
+        'gives an error if "configMap" is not an object.',
+        harness('Not an object.', '"configMap" must be a ConfigMap object.'),
       );
-    });
 
-    it('throws if a property of "configMap" is not an object.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({groupOne: 3})).toThrow(
-        '"configMap.groupOne" must be a ConfigGroup object.',
+      it(
+        'gives an error if "configMap" is null.',
+        harness(null, '"configMap" must be a ConfigMap object.'),
       );
-    });
 
-    it('throws if a property of "configMap" is null.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({groupOne: null})).toThrow(
-        '"configMap.groupOne" must be a ConfigGroup object.',
+      it(
+        'gives an error if a property of "configMap" is not an object.',
+        harness(
+          {groupOne: 3},
+          '"configMap.groupOne" must be a ConfigGroup object.',
+        ),
       );
-    });
 
-    it('throws if a property of a property of "configMap" is not a string or an object.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({groupOne: {propOne: 3}})).toThrow(
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+      it(
+        'gives an error if a property of "configMap" is null.',
+        harness(
+          {groupOne: null},
+          '"configMap.groupOne" must be a ConfigGroup object.',
+        ),
       );
-    });
 
-    it('throws if a property of a property of "configMap" is null.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({groupOne: {propOne: null}})).toThrow(
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+      it(
+        'gives an error if a property of a property of "configMap" is not a string or an object.',
+        harness(
+          {groupOne: {propOne: 3}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
       );
-    });
 
-    it('throws if a property of a property of "configMap" is an object with neither "filePath" nor "variableName".', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({groupOne: {propOne: {}}})).toThrow(
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+      it(
+        'gives an error if a property of a property of "configMap" is null.',
+        harness(
+          {groupOne: {propOne: null}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
       );
-    });
 
-    it('throws if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.', () => {
-      expect(() =>
-        // $FlowFixMe
-        loadConfig({
-          groupOne: {
-            propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
+      it(
+        'gives an error if a property of a property of "configMap" is an object with neither "filePath" nor "variableName".',
+        harness(
+          {groupOne: {propOne: {}}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
+      );
+
+      it(
+        'gives an error if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.',
+        harness(
+          {
+            groupOne: {
+              propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
+            },
           },
-        }),
-      ).toThrow(
-        'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
+          'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
+        ),
       );
     });
 
-    it('throws if "callback" is not a a function or undefined.', () => {
-      // $FlowFixMe
-      expect(() => loadConfig({}, 'Neither a function nor undefined.')).toThrow(
-        '"callback" must be a function or undefined.',
+    describe('with the Promise interface', () => {
+      function harness(configMap: any, message: string) {
+        return () => expect(loadConfig(configMap)).rejects.toThrow(message);
+      }
+
+      it(
+        'rejects if "configMap" is undefined.',
+        harness(undefined, '"configMap" must be a ConfigMap object.'),
       );
+
+      it(
+        'rejects if "configMap" is not an object.',
+        harness('Not an object.', '"configMap" must be a ConfigMap object.'),
+      );
+
+      it(
+        'rejects if "configMap" is null.',
+        harness(null, '"configMap" must be a ConfigMap object.'),
+      );
+
+      it('reject if "configMap" is undefined and "callback" is not a function or undefined.', async () => {
+        const configPromise = loadConfig(
+          // $FlowFixMe
+          undefined,
+          'Neither a function nor undefined.',
+        );
+        await expect(configPromise).rejects.toThrow(
+          '"configMap" must be a ConfigMap object.',
+        );
+      });
+
+      it('reject if "configMap" is not an object and "callback" is not a function or undefined.', async () => {
+        const configPromise = loadConfig(
+          // $FlowFixMe
+          'Not an object.',
+          'Neither a function nor undefined.',
+        );
+        await expect(configPromise).rejects.toThrow(
+          '"configMap" must be a ConfigMap object.',
+        );
+      });
+
+      it('reject if "configMap" is null and "callback" is not a function or undefined.', async () => {
+        const configPromise = loadConfig(
+          // $FlowFixMe
+          null,
+          'Neither a function nor undefined.',
+        );
+        await expect(configPromise).rejects.toThrow(
+          '"configMap" must be a ConfigMap object.',
+        );
+      });
+
+      it(
+        'rejects if a property of "configMap" is not an object.',
+        harness(
+          {groupOne: 3},
+          '"configMap.groupOne" must be a ConfigGroup object.',
+        ),
+      );
+
+      it(
+        'rejects if a property of "configMap" is null.',
+        harness(
+          {groupOne: null},
+          '"configMap.groupOne" must be a ConfigGroup object.',
+        ),
+      );
+
+      it(
+        'rejects if a property of a property of "configMap" is not a string or an object.',
+        harness(
+          {groupOne: {propOne: 3}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
+      );
+
+      it(
+        'rejects if a property of a property of "configMap" is null.',
+        harness(
+          {groupOne: {propOne: null}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
+      );
+
+      it(
+        'rejects if a property of a property of "configMap" is an object with neither "filePath" nor "variableName".',
+        harness(
+          {groupOne: {propOne: {}}},
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        ),
+      );
+
+      it(
+        'rejects if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.',
+        harness(
+          {
+            groupOne: {
+              propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
+            },
+          },
+          'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
+        ),
+      );
+
+      it('rejects if "callback" is not a a function or undefined.', async () => {
+        const configPromise = loadConfig(
+          {},
+          // $FlowFixMe
+          'Neither a function nor undefined.',
+        );
+        await expect(configPromise).rejects.toThrow(
+          '"callback" must be a function or undefined.',
+        );
+      });
     });
   });
 
@@ -180,12 +298,10 @@ describe('loadConfig', () => {
           // $FlowFixMe
           const error: ConfigError = await configPromise.catch(err => err);
 
-          expect(error).toBeInstanceOf(Error);
           expect(error.message).toEqual('Configuration could not be loaded.');
 
           const {errors} = error;
           expect(errors.length).toBe(1);
-          expect(errors[0]).toBeInstanceOf(Error);
           expect(errors[0].message).toEqual('PROP_ONE is not defined.');
         });
       });
@@ -210,7 +326,6 @@ describe('loadConfig', () => {
           loadConfig(
             {groupOne: {propOne: {required: true, variableName}}},
             (error, config) => {
-              expect(error).toBeInstanceOf(Error);
               expect(config.groupOne.propOne).toBeUndefined();
               // $FlowFixMe
               expect(error.message).toEqual(
@@ -219,7 +334,6 @@ describe('loadConfig', () => {
 
               const {errors} = error || {};
               expect(errors.length).toBe(1);
-              expect(errors[0]).toBeInstanceOf(Error);
               expect(errors[0].message).toEqual('PROP_ONE is not defined.');
               done();
             },
@@ -330,12 +444,10 @@ describe('loadConfig', () => {
           // $FlowFixMe
           const error: ConfigError = await configPromise.catch(err => err);
 
-          expect(error).toBeInstanceOf(Error);
           expect(error.message).toEqual('Configuration could not be loaded.');
 
           const {errors} = error;
           expect(errors.length).toBe(1);
-          expect(errors[0]).toBeInstanceOf(Error);
         });
       });
 
@@ -352,16 +464,13 @@ describe('loadConfig', () => {
           loadConfig(
             {groupOne: {propOne: {filePath, required: true}}},
             (error, config) => {
-              expect(error).toBeInstanceOf(Error);
               expect(config.groupOne.propOne).toBeUndefined();
               // $FlowFixMe
               expect(error.message).toEqual(
                 'Configuration could not be loaded.',
               );
-
-              const {errors} = error || {};
-              expect(errors.length).toBe(1);
-              expect(errors[0]).toBeInstanceOf(Error);
+              // $FlowFixMe
+              expect(error.errors.length).toBe(1);
             },
           );
         });
