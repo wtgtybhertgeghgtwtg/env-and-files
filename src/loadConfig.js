@@ -43,19 +43,21 @@ export default (fromCallback(
       typeof callback === 'function',
       '"callback" must be a function or undefined.',
     );
-    pPropsMap(configMap, async (group, groupName) => {
-      assert(
-        isobject(group),
-        `"configMap.${groupName}" must be a ConfigGroup object.`,
-      );
-      const result = await pPropsMap(group, (property, propertyName) =>
+    pPropsMap(configMap, (group, groupName) => {
+      if (!isobject(group)) {
+        return Promise.reject(
+          new Error(`"configMap.${groupName}" must be a ConfigGroup object.`),
+        );
+      }
+      return pPropsMap(group, (property, propertyName) =>
         loadProperty(property, propertyName, groupName),
-      );
-      const config = objectMap(result, prop => prop.config);
-      const errors = collectionMap(result, prop => prop.error).filter(
-        error => error,
-      );
-      return {config, errors};
+      ).then(result => {
+        const config = objectMap(result, prop => prop.config);
+        const errors = collectionMap(result, prop => prop.error).filter(
+          error => error,
+        );
+        return {config, errors};
+      });
     }).then(
       result => {
         const config = objectMap(result, prop => prop.config);
