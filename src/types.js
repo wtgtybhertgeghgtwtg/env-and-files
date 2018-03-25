@@ -12,9 +12,9 @@ export type ConfigCallback<CMap: ConfigMap> = (
   config: Config<CMap>,
 ) => void;
 
-export type ConfigGroup = {
-  [property: string]: string | EnvironmentConfig | FileConfig,
-};
+export type ConfigGroup = $Subtype<{
+  +[property: string]: string | EnvironmentConfig | FileConfig,
+}>;
 
 export type ConfigMap = {
   [group: string]: ConfigGroup,
