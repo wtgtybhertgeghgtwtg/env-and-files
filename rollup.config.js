@@ -19,7 +19,6 @@ export default {
       languageOut: 'ECMASCRIPT6_STRICT',
       processCommonJsModules: false,
       renaming: false,
-      useTypesForOptimization: false,
     }),
     prettier(),
   ],
