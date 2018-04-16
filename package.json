@@ -36,7 +36,7 @@
     "lint-staged": "^7.0.0",
     "prettier": "1.12.0",
     "rimraf": "^2.6.2",
-    "rollup": "^0.57.0",
+    "rollup": "^0.58.0",
     "rollup-plugin-babel": "^4.0.0-beta.2",
     "rollup-plugin-closure-compiler-js": "^1.0.6",
     "rollup-plugin-prettier": "^0.4.0"
