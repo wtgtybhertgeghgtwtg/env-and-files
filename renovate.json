@@ -1,4 +1,4 @@
 {
-  "extends": ["config:base", "default:automergeDigest"],
+  "extends": ["config:base", "docker:disable"],
   "pinVersions": false
 }
