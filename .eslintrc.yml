@@ -13,4 +13,8 @@ plugins:
   - flowtype
 
 rules:
+  import/no-extraneous-dependencies:
+    - error
+    - devDependencies:
+      - scripts/**
   no-underscore-dangle: 0

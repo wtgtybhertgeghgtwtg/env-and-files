@@ -2,7 +2,7 @@ jobs:
 
   lint:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +19,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8
     steps:
       - checkout
       - restore_cache:
@@ -36,7 +36,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8
     steps:
       - checkout
       - restore_cache:
@@ -48,12 +48,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn test
+      - run: yarn test:src
     working_directory: ~/repo
 
   test-dist:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8
     steps:
       - checkout
       - restore_cache:
@@ -66,7 +66,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
-      - run: yarn test-dist
+      - run: yarn test:dist
     working_directory: ~/repo
 
 version: 2
