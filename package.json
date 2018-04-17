@@ -21,6 +21,7 @@
     "@babel/preset-flow": "^7.0.0-beta.40",
     "@commitlint/cli": "^6.1.2",
     "@commitlint/config-conventional": "^6.1.2",
+    "assign-deep": "^0.4.7",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.1",
@@ -37,9 +38,7 @@
     "prettier": "1.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.58.0",
-    "rollup-plugin-babel": "^4.0.0-beta.2",
-    "rollup-plugin-closure-compiler-js": "^1.0.6",
-    "rollup-plugin-prettier": "^0.4.0"
+    "rollup-plugin-babel": "^4.0.0-beta.4"
   },
   "engines": {
     "node": ">=4"
@@ -49,18 +48,22 @@
     "src"
   ],
   "license": "MIT",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.es.js",
   "name": "env-and-files",
   "repository": {
     "type": "git",
     "url": "https://github.com/wtgtybhertgeghgtwtg/env-and-files"
   },
   "scripts": {
-    "build": "rollup -c && echo \"// @flow\\nexport * from '../src';\" > dist/index.js.flow",
+    "build": "yarn build:cjs && yarn build:es && echo \"// @flow\\nexport * from '../src';\" > dist/index.cjs.js.flow",
+    "build:cjs": "rollup --config scripts/rollup/config.cjs.js",
+    "build:es": "rollup --config scripts/rollup/config.es.js",
     "clean": "rimraf coverage dist",
-    "lint": "eslint . && prettier --l \"src/**/*.js\"",
-    "test": "jest --config ./scripts/jest/config.source.js",
-    "test-dist": "jest --config ./scripts/jest/config.dist.js"
+    "lint": "flow && eslint . && prettier --l \"{__tests__,src}/**/*.js\"",
+    "test": "yarn test:src && yarn build && yarn test:dist",
+    "test:src": "jest --config scripts/jest/config.source.js",
+    "test:dist": "jest --config scripts/jest/config.dist.js"
   },
   "version": "0.0.0-semantic-release"
 }
