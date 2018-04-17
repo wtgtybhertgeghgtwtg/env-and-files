@@ -2,7 +2,7 @@ jobs:
 
   lint:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8@sha256:a971d3cc8dd7e5166851445e9a15abcf1115cc042db44c5768dfac2d4d44f92e
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +19,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8@sha256:a971d3cc8dd7e5166851445e9a15abcf1115cc042db44c5768dfac2d4d44f92e
     steps:
       - checkout
       - restore_cache:
@@ -36,7 +36,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8@sha256:a971d3cc8dd7e5166851445e9a15abcf1115cc042db44c5768dfac2d4d44f92e
     steps:
       - checkout
       - restore_cache:
@@ -53,7 +53,7 @@ jobs:
 
   test-dist:
     docker:
-      - image: circleci/node:8@sha256:c263c0776f96fb7ed5468aa0484090907bfc3232e03b4b7887b4030e709044e1
+      - image: circleci/node:8@sha256:a971d3cc8dd7e5166851445e9a15abcf1115cc042db44c5768dfac2d4d44f92e
     steps:
       - checkout
       - restore_cache:
