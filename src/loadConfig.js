@@ -25,9 +25,6 @@ type PromiseInterface = <CMap: ConfigMap>(
   configMap: CMap,
 ) => Promise<Config<CMap>>;
 
-const pPropsMap = (object: Object, mapper: Function) =>
-  pProps(objectMap(object, mapper));
-
 export default (fromCallback(
   <CMap: ConfigMap>(configMap: CMap, callback: LoadConfigCallback<CMap>) => {
     if (!isobject(configMap)) {
@@ -43,13 +40,13 @@ export default (fromCallback(
       typeof callback === 'function',
       '"callback" must be a function or undefined.',
     );
-    pPropsMap(configMap, (group, groupName) => {
+    pProps(configMap, (group, groupName) => {
       if (!isobject(group)) {
         return Promise.reject(
           new Error(`"configMap.${groupName}" must be a ConfigGroup object.`),
         );
       }
-      return pPropsMap(group, (property, propertyName) =>
+      return pProps(group, (property, propertyName) =>
         loadProperty(property, propertyName, groupName),
       ).then(result => {
         const config = objectMap(result, prop => prop.config);
