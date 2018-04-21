@@ -21,7 +21,6 @@
     "@babel/preset-flow": "^7.0.0-beta.40",
     "@commitlint/cli": "^6.1.2",
     "@commitlint/config-conventional": "^6.1.2",
-    "assign-deep": "^0.4.7",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^22.4.1",
@@ -38,7 +37,8 @@
     "prettier": "1.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.58.0",
-    "rollup-plugin-babel": "^4.0.0-beta.4"
+    "rollup-plugin-babel": "^4.0.0-beta.4",
+    "write": "^1.0.3"
   },
   "engines": {
     "node": ">=4"
@@ -56,9 +56,7 @@
     "url": "https://github.com/wtgtybhertgeghgtwtg/env-and-files"
   },
   "scripts": {
-    "build": "yarn build:cjs && yarn build:es && echo \"// @flow\\nexport * from '../src';\" > dist/index.cjs.js.flow",
-    "build:cjs": "rollup --config scripts/rollup/config.cjs.js",
-    "build:es": "rollup --config scripts/rollup/config.es.js",
+    "build": "node scripts/build",
     "clean": "rimraf coverage dist",
     "lint": "flow && eslint . && prettier --l \"{__tests__,src}/**/*.js\"",
     "test": "yarn test:src && yarn build && yarn test:dist",
