@@ -75,9 +75,21 @@ loadConfig(
 
 ## API
 
-### loadConfig(configMap, callback?)
+### loadConfig(configMap, [callback])
 
-If `callback` is not defined, returns a `Promise` that is fulfilled once all configuration properties in `configMap` are loaded. The fulfilled value is an object map containing the loaded configuration properties. If a required property could not be loaded, the Promise will reject. If `callback` is defined, it will be called with an error (if any) and the loaded configuration properties.
+Load configuration. If `callback` is not defined, returns a `Promise` that will resolve to the loaded configuration, or reject if the configuration was invalid.
+
+#### configMap
+
+Type: `Object`
+
+An object map of conceptual groupings of necessary configuration and where to find it. By default, all configuration properties are optional, but if one is marked required and is not found, an error will be given. See [usage](#usage) for examples of config maps.
+
+#### callback(error, config)
+
+Type: `Function`
+
+An optional callback to be invoked when configuration is loaded. It will be called with an error (if any) and the loaded configuration properties.
 
 ## License
 
