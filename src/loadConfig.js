@@ -48,13 +48,12 @@ export default (fromCallback(
       }
       return pProps(group, (property, propertyName) =>
         loadProperty(property, propertyName, groupName),
-      ).then(result => {
-        const config = objectMap(result, prop => prop.config);
-        const errors = collectionMap(result, prop => prop.error).filter(
+      ).then(result => ({
+        config: objectMap(result, prop => prop.config),
+        errors: collectionMap(result, prop => prop.error).filter(
           error => error,
-        );
-        return {config, errors};
-      });
+        ),
+      }));
     }).then(
       result => {
         const config = objectMap(result, prop => prop.config);
