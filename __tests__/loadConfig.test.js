@@ -477,4 +477,19 @@ describe('loadConfig', () => {
       });
     });
   });
+
+  describe('the error returned', () => {
+    it('is serializable.', done => {
+      const variableName = 'PROP_ONE';
+      delete process.env[variableName];
+      loadConfig(
+        {groupOne: {propOne: {required: true, variableName}}},
+        error => {
+          const json = JSON.stringify(error);
+          expect(json).toMatch(`${variableName} is not defined.`);
+          done();
+        },
+      );
+    });
+  });
 });
