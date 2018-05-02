@@ -1,11 +1,10 @@
 // @flow
+import mapToMap from 'map-to-map';
+
 let files: Map<string, Buffer> = new Map();
 
-// eslint-disable-next-line require-jsdoc
-function __setFiles(newFiles: {[path: string]: string}) {
-  const entries = Object.entries(newFiles);
-  // $FlowFixMe
-  files = new Map(entries);
+function __setFiles(newFiles: {[path: string]: Buffer}) {
+  files = mapToMap(newFiles);
 }
 
 // $FlowFixMe
@@ -26,7 +25,17 @@ const readFile = jest.fn(
   },
 );
 
+// $FlowFixMe
+const readFileSync = jest.fn((path: string, encoding: buffer$Encoding) => {
+  const file = files.get(path);
+  if (file && Buffer.isBuffer(file)) {
+    return file.toString(encoding);
+  }
+  throw new Error();
+});
+
 module.exports = {
   __setFiles,
   readFile,
+  readFileSync,
 };

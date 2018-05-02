@@ -30,6 +30,7 @@
     "husky": "^1.0.0-rc.1",
     "jest": "^22.4.2",
     "lint-staged": "^7.0.0",
+    "map-to-map": "^1.0.0",
     "prettier": "1.12.1",
     "rimraf": "^2.6.2",
     "rollup": "^0.58.0",

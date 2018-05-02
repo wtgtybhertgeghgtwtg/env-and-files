@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable consistent-return */
 import arrFlatten from 'arr-flatten';
 import collectionMap from 'collection-map';
 import isobject from 'isobject';
@@ -21,8 +20,8 @@ export default function loadConfig<CMap: ConfigMap>(
         new Error(`"configMap.${groupName}" must be a ConfigGroup object.`),
       );
     }
-    return pProps(group, (property, propertyName) =>
-      loadProperty(property, propertyName, groupName),
+    return pProps(group, (prop, propName) =>
+      loadProperty(prop, propName, groupName),
     ).then(result => ({
       config: objectMap(result, prop => prop.config),
       errors: collectionMap(result, prop => prop.error).filter(error => error),
