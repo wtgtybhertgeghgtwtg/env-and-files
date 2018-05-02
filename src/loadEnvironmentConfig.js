@@ -15,7 +15,7 @@ export default function loadEnvironmentConfig(property: EnvironmentConfig) {
   const error =
     required && typeof config !== 'string'
       ? new Error(`${variableName} is not defined.`)
-      : null;
+      : undefined;
 
   return {config, error};
 }

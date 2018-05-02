@@ -16,5 +16,6 @@ rules:
   import/no-extraneous-dependencies:
     - error
     - devDependencies:
+      - __mocks__/**
       - scripts/**
   no-underscore-dangle: 0

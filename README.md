@@ -13,7 +13,7 @@ $ yarn add env-and-files
 ## Usage
 
 ```js
-const loadConfig = require('env-and-files');
+const {loadConfig} = require('env-and-files');
 
 loadConfig({
   // A conceptual grouping of configuration properties.  In this case, configuration for the logger.
@@ -35,49 +35,23 @@ loadConfig({
       required: true,
     },
   },
-}).then(
-  config => {
+})
+  .then(config => {
     // "config" will be an object map of configuration groups.  In this case, the shape would be:
     // { logger: { level: ?string }, server: { port: ?string }, sql: { password: ?string } }
     console.log(config);
-  },
-  error => {
+  })
+  .catch(error => {
     // If any of the required properties cannot be loaded, the Promise will reject.
     console.log(error);
-  },
-);
-
-// Alternatively, using a callback.
-loadConfig(
-  {
-    logger: {
-      level: 'LOG_LEVEL',
-    },
-    server: {
-      port: {
-        required: true,
-        variableName: 'PORT',
-      },
-    },
-    sql: {
-      password: {
-        filePath: '/path/to/secret',
-        required: true,
-      },
-    },
-  },
-  (error, config) => {
-    // "config" will be provided whether or not there is an error.
-    console.log(config);
-  },
-);
+  });
 ```
 
 ## API
 
-### loadConfig(configMap, [callback])
+### loadConfig(configMap)
 
-Load configuration. If `callback` is not defined, returns a `Promise` that will resolve to the loaded configuration, or reject if the configuration was invalid.
+Load configuration. Returns a `Promise` that will resolve to the loaded configuration, or reject if the configuration was invalid.
 
 #### configMap
 
@@ -85,11 +59,15 @@ Type: `Object`
 
 An object map of conceptual groupings of necessary configuration and where to find it. By default, all configuration properties are optional, but if one is marked required and is not found, an error will be given. See [usage](#usage) for examples of config maps.
 
-#### callback(error, config)
+### loadConfigSync(configMap)
 
-Type: `Function`
+Load configuration, synchronously. Returns the loaded configuration, or throws if the configuration was invalid.
 
-An optional callback to be invoked when configuration is loaded. It will be called with an error (if any) and the loaded configuration properties.
+#### configMap
+
+Type: `Object`
+
+Same as the asynchronous version.
 
 ## License
 
