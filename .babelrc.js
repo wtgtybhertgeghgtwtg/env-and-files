@@ -4,7 +4,7 @@ module.exports = {
       '@babel/preset-env',
       {
         modules: process.env.NODE_ENV === 'test' && 'commonjs',
-        targets: {node: '4'},
+        targets: {node: '6'},
       },
     ],
     '@babel/preset-flow',
