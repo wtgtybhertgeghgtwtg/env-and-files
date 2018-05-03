@@ -1,8 +1,5 @@
 // @flow
-import arrFlatten from 'arr-flatten';
-import collectionMap from 'collection-map';
 import isobject from 'isobject';
-import objectMap from 'object.map';
 import pProps from 'p-props';
 import ConfigError from './ConfigError';
 import loadProperty from './loadProperty';
@@ -14,6 +11,7 @@ export default function loadConfig<CMap: ConfigMap>(
   if (!isobject(configMap)) {
     return Promise.reject(new Error('"configMap" must be a ConfigMap object.'));
   }
+  const errors = [];
   return pProps(configMap, (group, groupName) => {
     if (!isobject(group)) {
       return Promise.reject(
@@ -21,17 +19,17 @@ export default function loadConfig<CMap: ConfigMap>(
       );
     }
     return pProps(group, (prop, propName) =>
-      loadProperty(prop, propName, groupName),
-    ).then(result => ({
-      config: objectMap(result, prop => prop.config),
-      errors: collectionMap(result, prop => prop.error).filter(error => error),
-    }));
-  }).then(result => {
-    const config = objectMap(result, prop => prop.config);
-    const errors = arrFlatten(collectionMap(result, prop => prop.errors));
-    if (errors.length > 0) {
-      throw new ConfigError(errors);
-    }
-    return config;
+      loadProperty(prop, propName, groupName).then(({config, error}) => {
+        if (error) {
+          errors.push(error);
+        }
+        return config;
+      }),
+    ).then(result => {
+      if (errors.length > 0) {
+        throw new ConfigError(errors);
+      }
+      return result;
+    });
   });
 }
