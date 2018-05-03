@@ -4,8 +4,6 @@
     "name": "Matthew Fernando Garcia"
   },
   "dependencies": {
-    "arr-flatten": "^1.1.0",
-    "collection-map": "^1.0.0",
     "isobject": "^3.0.1",
     "object.map": "^1.0.1",
     "p-props": "^1.2.0"

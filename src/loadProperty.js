@@ -2,15 +2,15 @@
 import isobject from 'isobject';
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfig from './loadFileConfig';
-import type {ConfigResult, EnvironmentConfig, FileConfig} from './types';
+import type {EnvironmentConfig, FileConfig} from './types';
 
 export default function loadProperty(
   property: string | EnvironmentConfig | FileConfig,
   propertyName: string,
   groupName: string,
-): ConfigResult | Promise<ConfigResult> {
+) {
   if (typeof property === 'string') {
-    return loadEnvironmentConfig({variableName: property});
+    return Promise.resolve(loadEnvironmentConfig({variableName: property}));
   }
   const propertyIsObject = isobject(property);
   const isEnvConfig =
@@ -35,7 +35,7 @@ export default function loadProperty(
   }
   return isEnvConfig
     ? // $FlowFixMe
-      loadEnvironmentConfig(property)
+      Promise.resolve(loadEnvironmentConfig(property))
     : // $FlowFixMe
       loadFileConfig(property);
 }
