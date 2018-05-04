@@ -25,11 +25,11 @@ export default function loadConfig<CMap: ConfigMap>(
         }
         return config;
       }),
-    ).then(result => {
-      if (errors.length > 0) {
-        throw new ConfigError(errors);
-      }
-      return result;
-    });
+    );
+  }).then(result => {
+    if (errors.length > 0) {
+      throw new ConfigError(errors);
+    }
+    return result;
   });
 }
