@@ -17,11 +17,11 @@ export default function loadConfigSync<CMap: ConfigMap>(
       `"configMap.${groupName}" must be a ConfigGroup object.`,
     );
     return objectMap(group, (prop, propName) => {
-      const {config, error} = loadPropertySync(prop, propName, groupName);
-      if (error) {
-        errors.push(error);
+      const property = loadPropertySync(prop, propName, groupName);
+      if (property.error) {
+        errors.push(property.error);
       }
-      return config;
+      return property.config;
     });
   });
   if (errors.length > 0) {

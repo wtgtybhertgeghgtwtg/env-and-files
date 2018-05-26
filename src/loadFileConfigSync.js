@@ -6,8 +6,8 @@ export default function loadFileConfigSync(property: FileConfig) {
   const {encoding = 'utf8', filePath, required = false} = property;
   try {
     const config = readFileSync(filePath, encoding);
-    return {config, error: undefined};
+    return {config};
   } catch (error) {
-    return {config: undefined, error: required ? error : undefined};
+    return {config: undefined, error: required && error};
   }
 }

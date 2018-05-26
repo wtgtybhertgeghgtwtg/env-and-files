@@ -10,7 +10,7 @@ export default function loadFileConfig(property: FileConfig) {
       resolve({
         // config: config ?? undefined,
         config: typeof config === 'string' ? config : undefined,
-        error: error && required ? error : undefined,
+        error: required && error,
       }),
     ),
   );
