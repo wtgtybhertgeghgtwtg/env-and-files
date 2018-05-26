@@ -15,10 +15,10 @@
     "@babel/preset-flow": "^7.0.0-beta.46",
     "@commitlint/cli": "^6.1.2",
     "@commitlint/config-conventional": "^6.1.2",
+    "@wtg/scripts": "^1.1.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^8.2.2",
     "babel-jest": "^23.0.0",
-    "builtin-modules": "^2.0.0",
     "eslint": "^4.18.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-config-prettier": "^2.9.0",
@@ -30,10 +30,7 @@
     "lint-staged": "^7.0.0",
     "map-to-map": "^1.0.0",
     "prettier": "1.12.1",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.58.0",
-    "rollup-plugin-babel": "^4.0.0-beta.4",
-    "write": "^1.0.3"
+    "rimraf": "^2.6.2"
   },
   "engines": {
     "node": ">=6"
@@ -48,7 +45,7 @@
   "name": "env-and-files",
   "repository": "wtgtybhertgeghgtwtg/env-and-files",
   "scripts": {
-    "build": "node scripts/build",
+    "build": "wtg build",
     "clean": "rimraf coverage dist",
     "lint": "flow && eslint . && prettier --l \"{__tests__,src}/**/*.js\"",
     "test": "yarn test:src && yarn build && yarn test:dist",
