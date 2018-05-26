@@ -3,13 +3,13 @@ import assert from 'assert';
 import isobject from 'isobject';
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfigSync from './loadFileConfigSync';
-import type {ConfigResult, EnvironmentConfig, FileConfig} from './types';
+import type {EnvironmentConfig, FileConfig} from './types';
 
 export default function loadPropertySync(
   property: string | EnvironmentConfig | FileConfig,
   propertyName: string,
   groupName: string,
-): ConfigResult {
+) {
   if (typeof property === 'string') {
     return loadEnvironmentConfig({variableName: property});
   }

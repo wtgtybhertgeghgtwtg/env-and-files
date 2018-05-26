@@ -7,11 +7,9 @@ export default class ConfigError extends Error {
     this.errors = errors;
   }
 
-  toJSON() {
-    // Flow complains about not having it this way, for some reason.
-    const errors: Array<string> = this.errors.map(error => error.message);
+  toJSON(): {errors: Array<string>, message: string} {
     return {
-      errors,
+      errors: this.errors.map(error => error.message),
       message: this.message,
     };
   }
