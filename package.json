@@ -29,7 +29,7 @@
     "jest": "^23.0.0",
     "lint-staged": "^7.0.0",
     "map-to-map": "^1.0.0",
-    "prettier": "1.13.2",
+    "prettier": "1.13.3",
     "rimraf": "^2.6.2"
   },
   "engines": {
