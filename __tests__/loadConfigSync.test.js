@@ -5,83 +5,57 @@ import {loadConfigSync, type ConfigError} from '../src';
 jest.mock('fs');
 
 describe('loadConfig', () => {
-  describe('invariants', () => {
-    function harness(configMap: any, message: string) {
-      return () => expect(() => loadConfigSync(configMap)).toThrow(message);
-    }
-
-    it(
-      'throws if "configMap" is undefined.',
-      harness(undefined, '"configMap" must be a ConfigMap object.'),
-    );
-
-    it(
-      'throws if "configMap" is not an object.',
-      harness('Not an object.', '"configMap" must be a ConfigMap object.'),
-    );
-
-    it(
-      'throws if "configMap" is null.',
-      harness(null, '"configMap" must be a ConfigMap object.'),
-    );
-
-    it(
-      'throws if a property of "configMap" is not an object.',
-      harness(
-        {groupOne: 3},
-        '"configMap.groupOne" must be a ConfigGroup object.',
-      ),
-    );
-
-    it(
-      'throws if a property of "configMap" is null.',
-      harness(
-        {groupOne: null},
-        '"configMap.groupOne" must be a ConfigGroup object.',
-      ),
-    );
-
-    it(
-      'throws if a property of a property of "configMap" is not a string or an object.',
-      harness(
-        {groupOne: {propOne: 3}},
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
-      ),
-    );
-
-    it(
-      'throws if a property of a property of "configMap" is null.',
-      harness(
-        {groupOne: {propOne: null}},
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
-      ),
-    );
-
-    it(
-      'throws if a property of a property of "configMap" is an object with neither "filePath" nor "variableName".',
-      harness(
-        {groupOne: {propOne: {}}},
-        '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
-      ),
-    );
-
-    it(
-      'throws if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.',
-      harness(
-        {
-          groupOne: {
-            propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
-          },
-        },
-        'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
-      ),
-    );
-  });
-
   it('can load empty groups', () => {
     const config = loadConfigSync({groupOne: {}});
 
     expect(config.groupOne).toEqual({});
+  });
+
+  describe('invariants', () => {
+    it.each([undefined, 'not an object', null])(
+      'throws if "configMap" is %s.',
+      configMap => {
+        expect(() => loadConfigSync(configMap)).toThrow(
+          '"configMap" must be a ConfigMap object.',
+        );
+      },
+    );
+
+    it.each`
+      type               | groupOne
+      ${'not an object'} | ${3}
+      ${'null'}          | ${null}
+    `('throws if a property of "configMap" is $type.', ({groupOne}) => {
+      expect(() => loadConfigSync({groupOne})).toThrow(
+        '"configMap.groupOne" must be a ConfigGroup object.',
+      );
+    });
+
+    it.each`
+      type                                                      | propOne
+      ${'neither a string nor an object'}                       | ${3}
+      ${'null'}                                                 | ${null}
+      ${'an object with neither "filePath" nor "variableName"'} | ${{}}
+    `(
+      'throws if a property of a property of "configMap" is $type.',
+      ({propOne}) => {
+        expect(() => loadConfigSync({groupOne: {propOne}})).toThrow(
+          '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        );
+      },
+    );
+
+    it('throws if a property of a property of "configMap" is an object with both "filePath" and "variableName" defined.', () => {
+      expect(() =>
+        loadConfigSync({
+          groupOne: {
+            propOne: {filePath: '/prop.one', variableName: 'PROP_ONE'},
+          },
+        }),
+      ).toThrow(
+        'Cannot determine whether "configMap.groupOne.propOne" is an EnvironmentConfig object or a FileConfig object.  Both "filePath" and "variableName" are defined.',
+      );
+    });
   });
 
   describe('loading environmental variables', () => {

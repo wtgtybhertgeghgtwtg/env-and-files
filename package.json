@@ -26,7 +26,7 @@
     "eslint-plugin-import": "^2.9.0",
     "flow-bin": "^0.73.0",
     "husky": "^1.0.0-rc.1",
-    "jest": "^23.0.0",
+    "jest": "^23.1.0",
     "lint-staged": "^7.0.0",
     "map-to-map": "^1.0.0",
     "prettier": "1.13.4",
