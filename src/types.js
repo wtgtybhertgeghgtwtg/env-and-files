@@ -7,7 +7,10 @@ export type Config<CMap: ConfigMap> = $ObjMap<
     GMap,
   ) => $ObjMap<
     GMap,
-    ((string | {required?: false}) => ?string) & (({required: true}) => string),
+    ((string | {required?: false, type?: 'string'}) => ?string) &
+      (({required: true, type?: 'string'}) => string) &
+      (({required?: false, type: 'number'}) => ?number) &
+      (({required: true, type: 'number'}) => number),
   >,
 >;
 
@@ -22,6 +25,7 @@ export type ConfigMap = {
 
 export type EnvironmentConfig = {|
   required?: boolean,
+  type?: PropType,
   variableName: string,
 |};
 
@@ -29,4 +33,8 @@ export type FileConfig = {|
   encoding?: buffer$Encoding,
   filePath: string,
   required?: boolean,
+  type?: PropType,
 |};
+
+// This needs a better name.
+export type PropType = 'number' | 'string';

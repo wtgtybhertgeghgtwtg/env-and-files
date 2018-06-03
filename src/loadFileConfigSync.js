@@ -2,12 +2,14 @@
 import {readFileSync} from 'fs';
 import type {FileConfig} from './types';
 
-export default function loadFileConfigSync(property: FileConfig) {
+export default function loadFileConfigSync(
+  property: FileConfig,
+): {|error?: false | Error, value?: string|} {
   const {encoding = 'utf8', filePath, required = false} = property;
   try {
-    const config = readFileSync(filePath, encoding);
-    return {config};
+    const value = readFileSync(filePath, encoding);
+    return {value};
   } catch (error) {
-    return {config: undefined, error: required && error};
+    return {error: required && error};
   }
 }

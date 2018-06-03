@@ -6,11 +6,11 @@ export default function loadFileConfig(property: FileConfig) {
   const {encoding = 'utf8', filePath, required = false} = property;
 
   return new Promise(resolve =>
-    readFile(filePath, encoding, (error, config) =>
+    readFile(filePath, encoding, (error, value) =>
       resolve({
-        // config: config ?? undefined,
-        config: typeof config === 'string' ? config : undefined,
         error: required && error,
+        // value: value ?? undefined,
+        value: typeof value === 'string' ? value : undefined,
       }),
     ),
   );

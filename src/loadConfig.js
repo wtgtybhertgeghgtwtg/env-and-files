@@ -19,11 +19,11 @@ export default function loadConfig<CMap: ConfigMap>(
       );
     }
     return pProps(group, (prop, propName) =>
-      loadProperty(prop, propName, groupName).then(({config, error}) => {
+      loadProperty(prop, propName, groupName).then(({error, value}) => {
         if (error) {
           errors.push(error);
         }
-        return config;
+        return value;
       }),
     );
   }).then(result => {

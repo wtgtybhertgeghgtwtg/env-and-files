@@ -856,7 +856,9 @@ declare var describe: {
   /**
    * Skip running this describe block
    */
-  skip(name: JestTestName, fn: () => void): void
+  skip(name: JestTestName, fn: () => void): void,
+
+  each<TArguments>(args: $ReadOnlyArray<TArguments>): (name: JestTestName, args: TArguments) => void
 };
 
 /** An individual test unit */

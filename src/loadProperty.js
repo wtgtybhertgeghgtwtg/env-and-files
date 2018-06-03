@@ -1,24 +1,21 @@
 // @flow
-import isobject from 'isobject';
+/* eslint-disable no-undef */
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfig from './loadFileConfig';
 import type {EnvironmentConfig, FileConfig} from './types';
 
 export default function loadProperty(
-  property: string | EnvironmentConfig | FileConfig,
+  property: string | (EnvironmentConfig & FileConfig),
   propertyName: string,
   groupName: string,
 ) {
   if (typeof property === 'string') {
     return Promise.resolve(loadEnvironmentConfig({variableName: property}));
   }
-  const propertyIsObject = isobject(property);
-  const isEnvConfig =
-    // $FlowFixMe
-    propertyIsObject && typeof property.variableName === 'string';
-  const isFileConfig =
-    // $FlowFixMe
-    propertyIsObject && typeof property.filePath === 'string';
+  // $FlowFixMe
+  const isEnvConfig = typeof property?.variableName === 'string';
+  // $FlowFixMe
+  const isFileConfig = typeof property?.filePath === 'string';
   if (!(isEnvConfig || isFileConfig)) {
     return Promise.reject(
       new Error(
@@ -33,9 +30,26 @@ export default function loadProperty(
       ),
     );
   }
-  return isEnvConfig
-    ? // $FlowFixMe
-      Promise.resolve(loadEnvironmentConfig(property))
-    : // $FlowFixMe
-      loadFileConfig(property);
+  const {type = 'string'} = property;
+  if (!['number', 'string'].includes(type)) {
+    return Promise.reject(
+      new Error(
+        `"configMap.${groupName}.${propertyName}.type" must be 'number', 'string', or undefined.`,
+      ),
+    );
+  }
+  return Promise.resolve(
+    isEnvConfig ? loadEnvironmentConfig(property) : loadFileConfig(property),
+  ).then(result => {
+    if (type === 'string' || typeof result.value === 'undefined') {
+      return result;
+    }
+    const value = parseInt(result.value, 10);
+    const error =
+      Number.isNaN(value) &&
+      new Error(
+        `The value for "configMap.${groupName}.${propertyName}" was defined, but could not be coerced to a number.`,
+      );
+    return {error, value};
+  });
 }

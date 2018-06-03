@@ -22,25 +22,45 @@ describe('loadConfig', () => {
     );
 
     it.each`
-      type               | groupOne
+      condition          | groupOne
       ${'not an object'} | ${3}
       ${'null'}          | ${null}
-    `('rejects if a property of "configMap" is $type.', async ({groupOne}) => {
-      await expect(loadConfig({groupOne})).rejects.toThrow(
-        '"configMap.groupOne" must be a ConfigGroup object.',
-      );
-    });
+    `(
+      'rejects if a property of "configMap" is $condition.',
+      async ({groupOne}) => {
+        await expect(loadConfig({groupOne})).rejects.toThrow(
+          '"configMap.groupOne" must be a ConfigGroup object.',
+        );
+      },
+    );
 
     it.each`
-      type                                                      | propOne
+      condition                                                 | propOne
       ${'neither a string nor an object'}                       | ${3}
       ${'null'}                                                 | ${null}
       ${'an object with neither "filePath" nor "variableName"'} | ${{}}
     `(
-      'rejects if a property of a property of "configMap" is $type.',
+      'rejects if a property of a property of "configMap" is $condition.',
       async ({propOne}) => {
         await expect(loadConfig({groupOne: {propOne}})).rejects.toThrow(
           '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        );
+      },
+    );
+
+    it.each`
+      condition                          | type
+      ${'not a string or undefined'}     | ${3}
+      ${'neither "number" nor "string"'} | ${"Neither 'number' nor 'string'."}
+    `(
+      'rejects if the "type" of a property of a property of "configMap" is $condition.',
+      async ({type}) => {
+        await expect(
+          loadConfig({
+            groupOne: {propOne: {type, variableName: 'PROP_ONE'}},
+          }),
+        ).rejects.toThrow(
+          `"configMap.groupOne.propOne.type" must be 'number', 'string', or undefined.`,
         );
       },
     );
@@ -194,6 +214,44 @@ describe('loadConfig', () => {
         const {errors} = error;
         expect(errors.length).toBe(1);
       });
+    });
+  });
+
+  describe('type conversion.', () => {
+    const variableName = 'PROP_ONE';
+
+    it(`converts to a number if "type" is 'number' and the property can be parsed as a number.`, async () => {
+      process.env[variableName] = '1220';
+
+      const config = await loadConfig({
+        groupOne: {propOne: {type: 'number', variableName}},
+      });
+
+      expect(config.groupOne.propOne).toEqual(1220);
+    });
+
+    it(`throws if "type" is 'number' and the property cannot be parsed as a number.`, async () => {
+      process.env[variableName] = 'Not a number.';
+
+      const configPromise = loadConfig({
+        groupOne: {propOne: {type: 'number', variableName}},
+      });
+      await expect(configPromise).rejects.toThrow(
+        'Configuration could not be loaded.',
+      );
+
+      // $FlowFixMe
+      const error: ConfigError = await configPromise.catch(err => err);
+
+      // $FlowFixMe
+      expect(error.message).toEqual('Configuration could not be loaded.');
+
+      // $FlowFixMe
+      const {errors} = error;
+      expect(errors.length).toBe(1);
+      expect(errors[0].message).toEqual(
+        'The value for "configMap.groupOne.propOne" was defined, but could not be coerced to a number.',
+      );
     });
   });
 
