@@ -22,25 +22,42 @@ describe('loadConfig', () => {
     );
 
     it.each`
-      type               | groupOne
+      condition          | groupOne
       ${'not an object'} | ${3}
       ${'null'}          | ${null}
-    `('throws if a property of "configMap" is $type.', ({groupOne}) => {
+    `('throws if a property of "configMap" is $condition.', ({groupOne}) => {
       expect(() => loadConfigSync({groupOne})).toThrow(
         '"configMap.groupOne" must be a ConfigGroup object.',
       );
     });
 
     it.each`
-      type                                                      | propOne
+      condition                                                 | propOne
       ${'neither a string nor an object'}                       | ${3}
       ${'null'}                                                 | ${null}
       ${'an object with neither "filePath" nor "variableName"'} | ${{}}
     `(
-      'throws if a property of a property of "configMap" is $type.',
+      'throws if a property of a property of "configMap" is $condition.',
       ({propOne}) => {
         expect(() => loadConfigSync({groupOne: {propOne}})).toThrow(
           '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
+        );
+      },
+    );
+
+    it.each`
+      condition                          | type
+      ${'not a string or undefined'}     | ${3}
+      ${'neither "number" nor "string"'} | ${"Neither 'number' nor 'string'."}
+    `(
+      'throws if the "type" of a property of a property of "configMap" is $condition.',
+      ({type}) => {
+        expect(() =>
+          loadConfigSync({
+            groupOne: {propOne: {type, variableName: 'PROP_ONE'}},
+          }),
+        ).toThrow(
+          `"configMap.groupOne.propOne.type" must be 'number', 'string', or undefined.`,
         );
       },
     );
@@ -69,17 +86,13 @@ describe('loadConfig', () => {
       });
 
       it('equals the environmental variable.', () => {
-        const config = loadConfigSync({
-          groupOne: {propOne: {variableName}},
-        });
+        const config = loadConfigSync({groupOne: {propOne: {variableName}}});
 
         expect(config.groupOne.propOne).toEqual(variableValue);
       });
 
       it('equals the environmental variable (using shorthand syntax).', () => {
-        const config = loadConfigSync({
-          groupOne: {propOne: variableName},
-        });
+        const config = loadConfigSync({groupOne: {propOne: variableName}});
 
         expect(config.groupOne.propOne).toEqual(variableValue);
       });
@@ -188,6 +201,42 @@ describe('loadConfig', () => {
         const {errors} = error;
         expect(errors.length).toBe(1);
       });
+    });
+  });
+
+  describe('type conversion.', () => {
+    const variableName = 'PROP_ONE';
+
+    it(`converts to a number if "type" is 'number' and the property can be parsed as a number.`, () => {
+      process.env[variableName] = '1220';
+
+      const config = loadConfigSync({
+        groupOne: {propOne: {type: 'number', variableName}},
+      });
+
+      expect(config.groupOne.propOne).toEqual(1220);
+    });
+
+    it(`throws if "type" is 'number' and the property cannot be parsed as a number.`, () => {
+      process.env[variableName] = 'Not a number.';
+
+      let error: ConfigError;
+      try {
+        loadConfigSync({
+          groupOne: {propOne: {type: 'number', variableName}},
+        });
+      } catch (err) {
+        error = err;
+      }
+      // $FlowFixMe
+      expect(error.message).toEqual('Configuration could not be loaded.');
+
+      // $FlowFixMe
+      const {errors} = error;
+      expect(errors.length).toBe(1);
+      expect(errors[0].message).toEqual(
+        'The value for "configMap.groupOne.propOne" was defined, but could not be coerced to a number.',
+      );
     });
   });
 });

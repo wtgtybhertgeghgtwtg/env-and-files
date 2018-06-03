@@ -21,7 +21,7 @@ export default function loadConfigSync<CMap: ConfigMap>(
       if (property.error) {
         errors.push(property.error);
       }
-      return property.config;
+      return property.value;
     });
   });
   if (errors.length > 0) {
