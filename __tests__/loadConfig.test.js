@@ -243,10 +243,8 @@ describe('loadConfig', () => {
       // $FlowFixMe
       const error: ConfigError = await configPromise.catch(err => err);
 
-      // $FlowFixMe
       expect(error.message).toEqual('Configuration could not be loaded.');
 
-      // $FlowFixMe
       const {errors} = error;
       expect(errors.length).toBe(1);
       expect(errors[0].message).toEqual(

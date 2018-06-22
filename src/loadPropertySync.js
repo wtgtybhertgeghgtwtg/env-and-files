@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-undef */
 import assert from 'assert';
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfigSync from './loadFileConfigSync';
