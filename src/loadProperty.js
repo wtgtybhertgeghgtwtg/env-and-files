@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-undef */
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfig from './loadFileConfig';
 import type {EnvironmentConfig, FileConfig} from './types';
