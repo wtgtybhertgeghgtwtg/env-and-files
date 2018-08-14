@@ -7,7 +7,7 @@ export default class ConfigError extends Error {
     this.errors = errors;
   }
 
-  toJSON(): {errors: Array<string>, message: string} {
+  toJSON(): {|errors: Array<string>, message: string|} {
     return {
       errors: this.errors.map(error => error.message),
       message: this.message,

@@ -7,11 +7,7 @@ export default function loadFileConfig(property: FileConfig) {
 
   return new Promise(resolve =>
     readFile(filePath, encoding, (error, value) =>
-      resolve({
-        error: required && error,
-        // value: value ?? undefined,
-        value: typeof value === 'string' ? value : undefined,
-      }),
+      resolve({error: required && error, value: value ?? undefined}),
     ),
   );
 }

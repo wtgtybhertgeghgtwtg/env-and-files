@@ -1,6 +1,7 @@
 // @flow
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfig from './loadFileConfig';
+import parseProperty from './parseProperty';
 import type {EnvironmentConfig, FileConfig} from './types';
 
 export default function loadProperty(
@@ -39,16 +40,5 @@ export default function loadProperty(
   }
   return Promise.resolve(
     isEnvConfig ? loadEnvironmentConfig(property) : loadFileConfig(property),
-  ).then(result => {
-    if (type === 'string' || typeof result.value === 'undefined') {
-      return result;
-    }
-    const value = parseInt(result.value, 10);
-    const error =
-      Number.isNaN(value) &&
-      new Error(
-        `The value for "configMap.${groupName}.${propertyName}" was defined, but could not be coerced to a number.`,
-      );
-    return {error, value};
-  });
+  ).then(result => parseProperty(result, type, groupName, propertyName));
 }
