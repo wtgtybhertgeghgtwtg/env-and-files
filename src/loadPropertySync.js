@@ -2,6 +2,7 @@
 import assert from 'assert';
 import loadEnvironmentConfig from './loadEnvironmentConfig';
 import loadFileConfigSync from './loadFileConfigSync';
+import parseProperty from './parseProperty';
 import type {EnvironmentConfig, FileConfig} from './types';
 
 export default function loadPropertySync(
@@ -32,14 +33,5 @@ export default function loadPropertySync(
   const result = isEnvConfig
     ? loadEnvironmentConfig(property)
     : loadFileConfigSync(property);
-  if (type === 'string' || typeof result.value === 'undefined') {
-    return result;
-  }
-  const value = parseInt(result.value, 10);
-  const error =
-    Number.isNaN(value) &&
-    new Error(
-      `The value for "configMap.${groupName}.${propertyName}" was defined, but could not be coerced to a number.`,
-    );
-  return {error, value};
+  return parseProperty(result, type, groupName, propertyName);
 }
