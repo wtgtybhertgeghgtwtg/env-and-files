@@ -15,7 +15,7 @@ export type Config<CMap: ConfigMap> = $ObjMap<
 >;
 
 export type ConfigGroup = {
-  // $FlowFixMe
+  // $FlowFixMe https://github.com/facebook/flow/issues/4196
   [property: string]: string | EnvironmentConfig | FileConfig,
 };
 

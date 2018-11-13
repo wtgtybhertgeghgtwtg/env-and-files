@@ -39,6 +39,7 @@ describe('loadConfig', () => {
     `(
       'throws if a property of a property of "configMap" is $condition.',
       ({propOne}) => {
+        // $FlowFixMe
         expect(() => loadConfigSync({groupOne: {propOne}})).toThrow(
           '"configMap.groupOne.propOne" must be a string, EnvironmentConfig object, or FileConfig object.',
         );
@@ -54,6 +55,7 @@ describe('loadConfig', () => {
       ({type}) => {
         expect(() =>
           loadConfigSync({
+            // $FlowFixMe
             groupOne: {propOne: {type, variableName: 'PROP_ONE'}},
           }),
         ).toThrow(
