@@ -42,6 +42,20 @@
     "dist",
     "src"
   ],
+  "keywords": [
+    "config",
+    "configuration",
+    "dotenv",
+    "env",
+    "environment",
+    "files",
+    "load",
+    "loader",
+    "secrets",
+    "settings",
+    "twelve-factor",
+    "variables"
+  ],
   "license": "MIT",
   "main": "dist/index.cjs.js",
   "module": "dist/index.es.js",
