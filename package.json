@@ -33,14 +33,16 @@
     "lint-staged": "^8.0.0",
     "map-to-map": "^1.0.0",
     "prettier": "1.15.3",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "tsd-check": "^0.2.1"
   },
   "engines": {
     "node": ">=6"
   },
   "files": [
     "dist",
-    "src"
+    "src",
+    "types.d.ts"
   ],
   "keywords": [
     "config",
@@ -64,10 +66,11 @@
   "scripts": {
     "build": "wtg build",
     "clean": "rimraf coverage dist",
-    "lint": "flow && eslint . && prettier --l \"{__mocks__,__tests__,src}/**/*.js\"",
+    "lint": "flow && tsd-check && eslint . && prettier --l \"{__mocks__,__tests__,src}/**/*.js\"",
     "test": "yarn test:src && yarn build && yarn test:dist",
     "test:src": "jest --config scripts/jest/config.source.js",
     "test:dist": "jest --config scripts/jest/config.dist.js"
   },
+  "typings": "./types.d.ts",
   "version": "0.0.0-semantic-release"
 }

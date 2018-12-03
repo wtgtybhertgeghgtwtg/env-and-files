@@ -24,7 +24,7 @@ const {loadConfig} = require('env-and-files');
 loadConfig({
   // A conceptual grouping of configuration properties.  In this case, configuration for the logger.
   logger: {
-    // The "logger.level" property will be equal to the "LOG_LEVEL" environmental variable, or null if it is not present.
+    // The "logger.level" property will be equal to the "LOG_LEVEL" environmental variable, or undefined if it is not present.
     level: 'LOG_LEVEL',
   },
   server: {
@@ -38,7 +38,7 @@ loadConfig({
   },
   sql: {
     password: {
-      // The "sql.password" property will be equal to the contents of "/path/to/secret", or null if it could not be read.
+      // The "sql.password" property will be equal to the contents of "/path/to/secret", or undefined if it could not be read.
       filePath: '/path/to/secret',
       required: true,
     },
@@ -46,7 +46,7 @@ loadConfig({
 })
   .then(config => {
     // "config" will be an object map of configuration groups.  So, you'd get something like
-    // { logger: { level: null }, server: { port: 8000 }, sql: { password: 'abc123' } }
+    // { logger: { level: undefined }, server: { port: 8000 }, sql: { password: 'abc123' } }
     console.log(config);
   })
   .catch(error => {
