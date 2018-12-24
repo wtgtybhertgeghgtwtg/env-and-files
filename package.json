@@ -34,7 +34,7 @@
     "map-to-map": "^1.0.0",
     "prettier": "1.15.3",
     "rimraf": "^2.6.2",
-    "tsd-check": "^0.2.1"
+    "tsd-check": "^0.3.0"
   },
   "engines": {
     "node": ">=6"
