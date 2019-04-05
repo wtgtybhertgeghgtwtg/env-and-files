@@ -34,7 +34,7 @@
     "map-to-map": "^1.0.0",
     "prettier": "1.16.4",
     "rimraf": "^2.6.2",
-    "tsd-check": "^0.5.0"
+    "tsd": "^0.7.2"
   },
   "engines": {
     "node": ">=6"
@@ -66,11 +66,11 @@
   "scripts": {
     "build": "wtg build",
     "clean": "rimraf coverage dist",
-    "lint": "flow && tsd-check && eslint . && prettier --l \"{__mocks__,__tests__,src}/**/*.js\"",
+    "lint": "flow && tsd && eslint . && prettier --l \"{__mocks__,__tests__,src}/**/*.js\"",
     "test": "yarn test:src && yarn build && yarn test:dist",
     "test:src": "jest --config scripts/jest/config.source.js",
     "test:dist": "jest --config scripts/jest/config.dist.js"
   },
-  "typings": "./types.d.ts",
+  "types": "./types.d.ts",
   "version": "0.0.0-semantic-release"
 }
