@@ -7,6 +7,12 @@ According to The Twelve-Factor App, [configuration should come from environmenta
 ## Install
 
 ```
+npm install env-and-files
+```
+
+Or, with `yarn`:
+
+```
 $ yarn add env-and-files
 ```
 
@@ -18,32 +24,34 @@ const {loadConfig} = require('env-and-files');
 loadConfig({
   // A conceptual grouping of configuration properties.  In this case, configuration for the logger.
   logger: {
-    // The "logger.level" property will be equal to the "LOG_LEVEL" environmental variable, or null if it is not present.
+    // The "logger.level" property will be equal to the "LOG_LEVEL" environmental variable, or undefined if it is not present.
     level: 'LOG_LEVEL',
   },
   server: {
     port: {
       // Specify that this property is required.  If "PORT" is not found, an error will be given.
       required: true,
+      // Coerce the value to a number.  If it can't be coerced, an error will be given.
+      type: 'number',
       variableName: 'PORT',
     },
   },
   sql: {
     password: {
-      // The "sql.password" property will be equal to the contents of "/path/to/secret", or null if it could not be read.
+      // The "sql.password" property will be equal to the contents of "/path/to/secret", or undefined if it could not be read.
       filePath: '/path/to/secret',
       required: true,
     },
   },
 })
   .then(config => {
-    // "config" will be an object map of configuration groups.  In this case, the shape would be:
-    // { logger: { level: ?string }, server: { port: ?string }, sql: { password: ?string } }
+    // "config" will be an object map of configuration groups.  So, you'd get something like
+    // { logger: { level: undefined }, server: { port: 8000 }, sql: { password: 'abc123' } }
     console.log(config);
   })
   .catch(error => {
     // If any of the required properties cannot be loaded, the Promise will reject.
-    console.log(error);
+    console.error(error);
   });
 ```
 
