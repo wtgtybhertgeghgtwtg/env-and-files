@@ -4,7 +4,7 @@
     "name": "Matthew Fernando Garcia"
   },
   "dependencies": {
-    "isobject": "^3.0.1",
+    "isobject": "^4.0.0",
     "object.map": "^1.0.1",
     "p-props": "^2.0.0"
   },
