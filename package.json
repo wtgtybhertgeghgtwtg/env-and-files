@@ -6,7 +6,7 @@
   "dependencies": {
     "isobject": "^4.0.0",
     "object.map": "^1.0.1",
-    "p-props": "^3.0.0"
+    "p-props": "^4.0.0"
   },
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {
