@@ -1,7 +1,5 @@
 coverage
 dist
-lib
 node_modules
 yarn.lock
-yarn-debug.log*
-yarn-error.log*
+*.log*
