@@ -1,6 +1,6 @@
 module.exports = {
-  collectCoverageFrom: ['src/**/*.js', '!src/{index,types}.js'],
+  collectCoverageFrom: ['src/**/*.ts', '!src/{index,types}.ts'],
   rootDir: process.cwd(),
   testEnvironment: 'node',
-  testMatch: ['**/*.test.js'],
+  testMatch: ['**/*.test.ts'],
 };

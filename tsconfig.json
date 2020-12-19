@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["ES2019"],
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "paths": {
+      "*": ["node_modules/@types/*", "types/*"]
+    },
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "ES2019"
+  },
+  "exclude": ["node_modules"],
+  "include": ["__mocks__/**/*", "__tests__/**/*", "src/**/*"]
+}

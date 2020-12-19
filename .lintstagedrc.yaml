@@ -1,0 +1,6 @@
+'*.{json,md,yaml}':
+  - 'prettier --write'
+'*.{js,ts}':
+  - 'prettier --write'
+  - 'eslint --fix'
+  - 'jest --config ./scripts/jest/config.source.js --bail --findRelatedTests'

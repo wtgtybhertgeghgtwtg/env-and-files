@@ -21,35 +21,24 @@ $ yarn add env-and-files
 ```js
 const {loadConfig} = require('env-and-files');
 
-loadConfig({
-  // A conceptual grouping of configuration properties.  In this case, configuration for the logger.
-  logger: {
-    // The "logger.level" property will be equal to the "LOG_LEVEL" environmental variable, or undefined if it is not present.
-    level: 'LOG_LEVEL',
+loadConfigSync({
+  postgresPassword: {
+    filePath: '/secrets/password',
   },
-  server: {
-    port: {
-      // Specify that this property is required.  If "PORT" is not found, an error will be given.
-      required: true,
-      // Coerce the value to a number.  If it can't be coerced, an error will be given.
-      type: 'number',
-      variableName: 'PORT',
-    },
+  postgresUrl: {
+    format: (value) => new URL(value),
+    variableName: 'POSTGRES_URL',
   },
-  sql: {
-    password: {
-      // The "sql.password" property will be equal to the contents of "/path/to/secret", or undefined if it could not be read.
-      filePath: '/path/to/secret',
-      required: true,
-    },
+  postgresUsername: {
+    defaultValue: 'postgres',
+    filePath: '/secrets/username',
   },
 })
-  .then(config => {
-    // "config" will be an object map of configuration groups.  So, you'd get something like
-    // { logger: { level: undefined }, server: { port: 8000 }, sql: { password: 'abc123' } }
+  .then((config) => {
+    // "config" will be an object map of configuration properties.
     console.log(config);
   })
-  .catch(error => {
+  .catch((error) => {
     // If any of the required properties cannot be loaded, the Promise will reject.
     console.error(error);
   });
@@ -65,7 +54,7 @@ Load configuration. Returns a `Promise` that will resolve to the loaded configur
 
 Type: `Object`
 
-An object map of conceptual groupings of necessary configuration and where to find it. By default, all configuration properties are optional, but if one is marked required and is not found, an error will be given. See [usage](#usage) for examples of config maps.
+An object map of configuration and where to find it. By default, all configuration properties are required. See [usage](#usage) for examples of config maps.
 
 ### loadConfigSync(configMap)
 
