@@ -14,7 +14,14 @@ export default class ConfigError<
    * @param errors - The errors that this ConfigError represent.
    */
   public constructor(errors: ErrorMap) {
-    super('Configuration could not be loaded.');
+    super(
+      [
+        'Configuration could not be loaded for the following properties:',
+        ...Object.entries(errors).map(
+          ([key, {message}]) => `${key}: ${message}`,
+        ),
+      ].join('\n\t'),
+    );
     this.errors = errors;
   }
 

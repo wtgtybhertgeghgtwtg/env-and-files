@@ -460,4 +460,22 @@ describe('loading errors', () => {
       expect(errorMessage).toMatch('VARIABLE_NAME is not defined.');
     }
   });
+
+  it('includes unloaded properties in the message.', async () => {
+    try {
+      await loadConfig({
+        fileProperty: {
+          filePath,
+        },
+        variableProperty: {
+          variableName,
+        },
+      });
+    } catch (error) {
+      expect(error.message).toMatch('fileProperty: File not found.');
+      expect(error.message).toMatch(
+        'variableProperty: VARIABLE_NAME is not defined.',
+      );
+    }
+  });
 });
