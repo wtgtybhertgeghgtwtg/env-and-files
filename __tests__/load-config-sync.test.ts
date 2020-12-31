@@ -439,11 +439,13 @@ describe('loadConfig', () => {
     const filePath = '/path/file.extension';
     const variableName = 'VARIABLE_NAME';
 
-    it('stringifies to include all messages.', () => {
+    beforeEach(() => {
       delete process.env[variableName];
       // @ts-ignore
       fs._setFiles({});
+    });
 
+    it('stringifies to include all messages.', () => {
       try {
         loadConfigSync({
           fileProperty: {
@@ -457,6 +459,24 @@ describe('loadConfig', () => {
         const errorMessage = JSON.stringify(error);
         expect(errorMessage).toMatch('File not found.');
         expect(errorMessage).toMatch('VARIABLE_NAME is not defined.');
+      }
+    });
+
+    it('includes unloaded properties in the message.', () => {
+      try {
+        loadConfigSync({
+          fileProperty: {
+            filePath,
+          },
+          variableProperty: {
+            variableName,
+          },
+        });
+      } catch (error) {
+        expect(error.message).toMatch('fileProperty: File not found.');
+        expect(error.message).toMatch(
+          'variableProperty: VARIABLE_NAME is not defined.',
+        );
       }
     });
   });
