@@ -1,9 +1,4 @@
-import {
-  FormattableConfig,
-  PropertyFormatter,
-  PropertyResult,
-  RequirableConfig,
-} from './types';
+import {BaseConfig, PropertyFormatter, PropertyResult} from './types';
 
 function tryToFormat<Value>(
   value: string,
@@ -18,13 +13,9 @@ function tryToFormat<Value>(
 
 export default function something<Value>(
   propertyResult: PropertyResult<string>,
-  propertyConfig: FormattableConfig<Value> | RequirableConfig,
+  propertyConfig: BaseConfig<Value>,
 ): PropertyResult<string | Value> {
-  const {
-    defaultValue,
-    format,
-    required = true,
-  } = propertyConfig as FormattableConfig<Value>;
+  const {defaultValue, format, required = true} = propertyConfig;
   const hasDefaultValue = typeof defaultValue !== 'undefined';
   const hasError = propertyResult.error !== false;
   const hasFormat = typeof format !== 'undefined';

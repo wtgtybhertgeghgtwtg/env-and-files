@@ -376,11 +376,13 @@ describe('loadConfig', () => {
     const variableName = 'VARIABLE_NAME';
     const variableValue = 'The value of this environment variable.';
 
-    it('returns the formatted value.', () => {
+    beforeEach(() => {
       process.env[variableName] = variableValue;
       // @ts-ignore
       fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
+    });
 
+    it('returns the formatted value.', () => {
       // eslint-disable-next-line unicorn/consistent-function-scoping
       const formatter = (value: string): number => value.length;
 
@@ -399,11 +401,49 @@ describe('loadConfig', () => {
       expect(config.variableProperty).toEqual(formatter(variableValue));
     });
 
-    it('throws if the formatter throws.', () => {
-      process.env[variableName] = variableValue;
-      // @ts-ignore
-      fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
+    it('returns the formatted value if explicitly required.', () => {
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      const formatter = (value: string): number => value.length;
 
+      const config = loadConfigSync({
+        fileProperty: {
+          filePath,
+          format: formatter,
+          required: true,
+        },
+        variableProperty: {
+          format: formatter,
+          required: true,
+          variableName,
+        },
+      });
+
+      expect(config.fileProperty).toEqual(formatter(fileContent));
+      expect(config.variableProperty).toEqual(formatter(variableValue));
+    });
+
+    it('returns the formatted value if not required.', () => {
+      // eslint-disable-next-line unicorn/consistent-function-scoping
+      const formatter = (value: string): number => value.length;
+
+      const config = loadConfigSync({
+        fileProperty: {
+          filePath,
+          format: formatter,
+          required: false,
+        },
+        variableProperty: {
+          format: formatter,
+          required: false,
+          variableName,
+        },
+      });
+
+      expect(config.fileProperty).toEqual(formatter(fileContent));
+      expect(config.variableProperty).toEqual(formatter(variableValue));
+    });
+
+    it('throws if the formatter throws.', () => {
       // eslint-disable-next-line unicorn/consistent-function-scoping
       const formatter = (value: string): number => {
         const integer = Number.parseInt(value, 10);
