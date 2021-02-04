@@ -15,15 +15,15 @@
     "@babel/preset-typescript": "^7.12.7",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
-    "@rollup/plugin-babel": "^5.2.2",
     "@rollup/plugin-node-resolve": "^11.0.1",
+    "@rollup/plugin-typescript": "^8.1.1",
     "@rushstack/eslint-config": "^2.3.2",
     "@types/jest": "^26.0.19",
     "babel-eslint": "^10.0.0",
     "babel-jest": "^26.6.3",
     "builtin-modules": "^3.1.0",
     "cross-env": "^7.0.3",
-    "eslint": "^7.15.0",
+    "eslint": "^7.17.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-unicorn": "^27.0.0",
     "husky": "^4.3.6",
@@ -33,6 +33,7 @@
     "prettier": "2.2.1",
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
+    "tslib": "^2.1.0",
     "typescript": "^4.1.3"
   },
   "engines": {
@@ -40,7 +41,7 @@
   },
   "files": [
     "dist",
-    "src"
+    "source"
   ],
   "keywords": [
     "config",
@@ -64,12 +65,12 @@
   "scripts": {
     "build": "rollup -c",
     "clean": "rimraf coverage dist",
-    "lint": "tsc && eslint . && prettier --l \"{__mocks__,__tests__,src}/**/*.ts\"",
-    "test": "yarn test:src && yarn build && yarn test:dist",
-    "test:src": "jest --config scripts/jest/config.source.js",
+    "lint": "tsc && eslint . && prettier --l \"{__mocks__,__tests__,source}/**/*.ts\"",
+    "test": "yarn test:source && yarn build && yarn test:dist",
+    "test:source": "jest --config scripts/jest/config.source.js",
     "test:dist": "jest --config scripts/jest/config.dist.js"
   },
   "sideEffects": false,
-  "types": "./src",
+  "types": "dist/source",
   "version": "0.0.0-semantic-release"
 }

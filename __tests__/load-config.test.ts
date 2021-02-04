@@ -1,7 +1,7 @@
 jest.mock('fs');
 
 import fs from 'fs';
-import {ConfigError, loadConfig} from '../src';
+import {ConfigError, loadConfig} from '../source';
 
 describe('loadConfig', () => {
   it('can load empty configurations.', async () => {

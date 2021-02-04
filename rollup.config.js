@@ -1,24 +1,25 @@
-import babel from '@rollup/plugin-babel';
+// import babel from '@rollup/plugin-babel';
 import nodeResolve from '@rollup/plugin-node-resolve';
+import typescript from '@rollup/plugin-typescript';
 import builtinModules from 'builtin-modules';
-import package_ from './package.json';
+import {dependencies} from './package.json';
 
 export default {
-  external: [...builtinModules, ...Object.keys(package_.dependencies)],
-  input: 'src/index.ts',
+  external: [...builtinModules, ...Object.keys(dependencies)],
+  input: 'source/index.ts',
   output: [
     {
-      exports: 'auto',
-      file: 'dist/index.cjs.js',
+      dir: 'dist',
+      entryFileNames: '[name].[format].js',
       format: 'cjs',
+      sourcemap: true,
     },
     {
-      file: 'dist/index.es.js',
+      dir: 'dist',
+      entryFileNames: '[name].[format].js',
       format: 'es',
+      sourcemap: true,
     },
   ],
-  plugins: [
-    babel({babelHelpers: 'bundled', extensions: ['.ts']}),
-    nodeResolve({extensions: ['.ts']}),
-  ],
+  plugins: [nodeResolve({extensions: ['.ts']}), typescript()],
 };

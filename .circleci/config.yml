@@ -47,7 +47,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-      - run: yarn test:src
+      - run: yarn test:source
     working_directory: ~/repo
 
   test-dist:
