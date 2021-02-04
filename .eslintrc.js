@@ -46,7 +46,7 @@ module.exports = {
     },
   ],
   parserOptions: {
-    project: path.join(__dirname, './tsconfig.json'),
+    project: path.join(__dirname, './tsconfig.eslint.json'),
   },
   rules: {
     'eslint-comments/no-unused-disable': 'error',

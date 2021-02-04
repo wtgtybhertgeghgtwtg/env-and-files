@@ -1,22 +1,20 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "baseUrl": ".",
+    "declaration": true,
+    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "lib": ["ES2019"],
-    "module": "CommonJS",
+    "module": "esnext",
     "moduleResolution": "node",
-    "noEmit": true,
-    "paths": {
-      "*": ["node_modules/@types/*", "types/*"]
-    },
+    "outDir": "dist",
     "resolveJsonModule": true,
+    "rootDir": ".",
     "skipLibCheck": true,
     "strict": true,
-    "strictNullChecks": true,
     "target": "ES2019"
   },
   "exclude": ["node_modules"],
-  "include": ["__mocks__/**/*", "__tests__/**/*", "src/**/*"]
+  "include": ["source"]
 }
