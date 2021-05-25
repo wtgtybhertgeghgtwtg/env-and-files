@@ -33,7 +33,7 @@ import {PropertyConfig, UnwrapPropertyConfig} from './types';
  * Thrown if one or more configuration properties was not able to load properly.
  */
 export default function loadConfigSync<
-  ConfigMap extends Record<string, PropertyConfig<unknown>>
+  ConfigMap extends Record<string, PropertyConfig<unknown>>,
 >(
   configMap: ConfigMap,
 ): {[key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>} {

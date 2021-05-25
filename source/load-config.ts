@@ -34,7 +34,7 @@ import {PropertyConfig, UnwrapPropertyConfig} from './types';
  * Rejects if one or more configuration properties was not able to load properly.
  */
 export default async function loadConfig<
-  ConfigMap extends Record<string, PropertyConfig<unknown>>
+  ConfigMap extends Record<string, PropertyConfig<unknown>>,
 >(
   configMap: ConfigMap,
 ): Promise<{[key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>}> {

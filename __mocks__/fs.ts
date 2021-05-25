@@ -6,7 +6,6 @@ function _setFiles(newFiles: {[path: string]: Buffer}): void {
   files = mapToMap(newFiles);
 }
 
-// $FlowFixMe
 const readFile = jest.fn(
   (
     path: string,
@@ -26,7 +25,6 @@ const readFile = jest.fn(
   },
 );
 
-// $FlowFixMe
 const readFileSync = jest.fn((path: string, encoding: BufferEncoding) => {
   const file = files.get(path);
   if (file && Buffer.isBuffer(file)) {
