@@ -44,6 +44,13 @@ module.exports = {
         ),
       },
     },
+    {
+      files: ['__mocks__/*.ts', 'scripts/jest/*.js', '.eslintrc.js'],
+      rules: {
+        // Mocks and some configuration files cannot be modules.
+        'unicorn/prefer-module': 'off'
+      }
+    }
   ],
   parserOptions: {
     project: path.join(__dirname, './tsconfig.eslint.json'),
@@ -53,5 +60,7 @@ module.exports = {
     // Since this is covered by 'eslint-comments/no-unlimited-disable'.
     'unicorn/no-abusive-eslint-disable': 'off',
     'unicorn/no-unsafe-regex': 'error',
+    // Does not work with TypeScript and is not backported to all supported versions of Node.
+    'unicorn/prefer-node-protocol': 'off'
   },
 };

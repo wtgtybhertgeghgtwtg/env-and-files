@@ -1,3 +1,0 @@
-hooks:
-  commit-msg: commitlint -e $HUSKY_GIT_PARAMS
-  pre-commit: tsc && cross-env NODE_ENV=test lint-staged

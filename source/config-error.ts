@@ -2,7 +2,7 @@
  * An error thrown when configuration could not be loaded.
  */
 export default class ConfigError<
-  ErrorMap extends Record<string, Error>
+  ErrorMap extends Record<string, Error>,
 > extends Error {
   /**
    * A collection of the individual errors, keyed by property name.
