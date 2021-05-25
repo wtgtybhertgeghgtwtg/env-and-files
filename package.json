@@ -9,6 +9,7 @@
   },
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {
+    "@arkweid/lefthook": "^0.7.5",
     "@babel/core": "^7.14.3",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.2",
     "@babel/preset-env": "^7.14.2",
@@ -25,9 +26,7 @@
     "eslint": "^7.27.0",
     "eslint-plugin-eslint-comments": "^3.2.0",
     "eslint-plugin-unicorn": "^32.0.1",
-    "husky": "^6.0.0",
     "jest": "^27.0.1",
-    "lint-staged": "^11.0.0",
     "map-to-map": "^2.0.0",
     "prettier": "2.3.0",
     "rimraf": "^3.0.2",

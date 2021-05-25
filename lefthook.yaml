@@ -1,0 +1,22 @@
+commit-msg:
+  commands:
+    # Check that the commit message is in the proper format.
+    commitlint:
+      run: 'commitlint --extends @commitlint/config-conventional --edit $1'
+pre-commit:
+  # These cannot be parallel because of the race condition with Prettier and ESLint.
+  commands:
+    # Typecheck everything.
+    typecheck:
+      run: tsc
+    # Lint changed files.
+    eslint:
+      glob: '*.{js,ts}'
+      run: 'eslint --fix {staged_files} && git add {staged_files}'
+    # Run Prettier on changed files.
+    prettier:
+      glob: '*.{js,json,md,ts,yaml}'
+      run: 'prettier --write {staged_files} && git add {staged_files}'
+    test:
+      glob: '*.{js,ts}'
+      run: 'jest --config ./scripts/jest/config.source.js --bail --findRelatedTests {staged_files}'
