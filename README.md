@@ -21,7 +21,7 @@ $ yarn add env-and-files
 ```js
 const {loadConfig} = require('env-and-files');
 
-loadConfigSync({
+loadConfig({
   postgresPassword: {
     filePath: '/secrets/password',
   },
