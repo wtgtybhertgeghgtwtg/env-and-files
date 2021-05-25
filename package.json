@@ -30,7 +30,7 @@
     "jest": "^27.0.0",
     "lint-staged": "^11.0.0",
     "map-to-map": "^2.0.0",
-    "prettier": "2.2.1",
+    "prettier": "2.3.0",
     "rimraf": "^3.0.2",
     "rollup": "^2.35.1",
     "tslib": "^2.1.0",
