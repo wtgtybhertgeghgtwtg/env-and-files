@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "@types/node": "^14.0.0",
-    "p-props": "^4.0.0"
+    "p-props": "^5.0.0"
   },
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {
