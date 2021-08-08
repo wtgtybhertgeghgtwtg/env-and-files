@@ -7,7 +7,7 @@ function tryToFormat<Value>(
   try {
     return {error: false, value: formatter(value)};
   } catch (error) {
-    return {error, value: undefined};
+    return {error: error as Error, value: undefined};
   }
 }
 

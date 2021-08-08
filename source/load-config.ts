@@ -1,4 +1,3 @@
-import pProps from 'p-props';
 import ConfigError from './config-error';
 import loadProperty from './load-property';
 import {PropertyConfig, UnwrapPropertyConfig} from './types';
@@ -39,18 +38,15 @@ export default async function loadConfig<
   configMap: ConfigMap,
 ): Promise<{[key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>}> {
   const errorMap = new Map<string, Error>();
-  const result = await pProps(
-    configMap,
-    async (propertyConfig, propertyName) => {
-      const {error, value} = await loadProperty(
-        propertyConfig,
-        propertyName as string,
-      );
+  const resultEntries = await Promise.all(
+    Object.entries(configMap).map(async ([propertyName, propertyConfig]) => {
+      const {error, value} = await loadProperty(propertyConfig, propertyName);
       if (error !== false) {
         errorMap.set(propertyName as string, error);
       }
-      return value as UnwrapPropertyConfig<ConfigMap[keyof ConfigMap]>;
-    },
+
+      return [propertyName, value];
+    }),
   );
 
   if (errorMap.size > 0) {
@@ -58,5 +54,5 @@ export default async function loadConfig<
     throw new ConfigError(errors);
   }
 
-  return result;
+  return Object.fromEntries(resultEntries);
 }

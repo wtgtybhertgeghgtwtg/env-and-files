@@ -9,7 +9,7 @@ function tryToReadFile(
   try {
     return {error: false, value: readFileSync(filePath, encoding)};
   } catch (error) {
-    return {error: error, value: undefined};
+    return {error: error as Error, value: undefined};
   }
 }
 

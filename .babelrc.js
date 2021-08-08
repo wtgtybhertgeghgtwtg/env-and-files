@@ -1,5 +1,4 @@
 module.exports = {
-  plugins: ['@babel/proposal-nullish-coalescing-operator'],
   presets: [
     [
       '@babel/env',
