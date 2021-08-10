@@ -17,7 +17,7 @@
     "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
     "@rushstack/eslint-config": "^2.4.0",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.0.0",
     "babel-jest": "^27.0.6",
     "builtin-modules": "^3.2.0",
     "cross-env": "^7.0.3",
