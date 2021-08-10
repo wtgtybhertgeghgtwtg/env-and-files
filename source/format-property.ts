@@ -11,7 +11,7 @@ function tryToFormat<Value>(
   }
 }
 
-export default function something<Value>(
+export default function formatProperty<Value>(
   propertyResult: PropertyResult<string>,
   propertyConfig: BaseConfig<Value>,
 ): PropertyResult<string | Value> {
