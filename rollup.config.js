@@ -1,24 +1,31 @@
-import nodeResolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
 import builtinModules from 'builtin-modules';
-import {dependencies} from './package.json';
+import ts from 'rollup-plugin-ts';
+import {fileURLToPath} from 'url';
+import packageJson from './package.json';
 
-export default {
-  external: [...builtinModules, ...Object.keys(dependencies)],
-  input: 'source/index.ts',
-  output: [
-    {
-      dir: 'dist',
-      entryFileNames: '[name].[format].js',
-      format: 'cjs',
+const external = [...builtinModules, ...Object.keys(packageJson.dependencies)];
+const typePath = fileURLToPath(new URL(packageJson.types, import.meta.url));
+
+function createConfig(isEs) {
+  return {
+    external,
+    input: 'source/index.ts',
+    output: {
+      file: isEs ? packageJson.module : packageJson.main,
+      format: isEs ? 'es' : 'cjs',
       sourcemap: true,
     },
-    {
-      dir: 'dist',
-      entryFileNames: '[name].[format].js',
-      format: 'es',
-      sourcemap: true,
-    },
-  ],
-  plugins: [nodeResolve({extensions: ['.ts']}), typescript()],
-};
+    plugins: [
+      ts({
+        hook: {
+          outputPath: (path, kind) =>
+            kind === 'declaration' ? typePath : path,
+        },
+        tsconfig: (resolvedConfig) =>
+          isEs ? resolvedConfig : {...resolvedConfig, declaration: false},
+      }),
+    ],
+  };
+}
+
+export default [createConfig(false), createConfig(true)];

@@ -48,19 +48,21 @@ module.exports = {
       files: ['__mocks__/*.ts', 'scripts/jest/*.js', '.eslintrc.js'],
       rules: {
         // Mocks and some configuration files cannot be modules.
-        'unicorn/prefer-module': 'off'
-      }
-    }
+        'unicorn/prefer-module': 'off',
+      },
+    },
   ],
   parserOptions: {
     project: path.join(__dirname, './tsconfig.eslint.json'),
   },
   rules: {
     'eslint-comments/no-unused-disable': 'error',
+    // Can't speak to `chalk`, but on the premise of the others, I disagree.
+    'unicorn/import-style': 'off',
     // Since this is covered by 'eslint-comments/no-unlimited-disable'.
     'unicorn/no-abusive-eslint-disable': 'off',
     'unicorn/no-unsafe-regex': 'error',
     // Does not work with TypeScript and is not backported to all supported versions of Node.
-    'unicorn/prefer-node-protocol': 'off'
+    'unicorn/prefer-node-protocol': 'off',
   },
 };
