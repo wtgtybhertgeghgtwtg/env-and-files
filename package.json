@@ -3,9 +3,7 @@
     "email": "wtgtybhertgeghgtwtg@gmail.com",
     "name": "Matthew Fernando Garcia"
   },
-  "dependencies": {
-    "@types/node": "^14.0.0"
-  },
+  "dependencies": {},
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {
     "@arkweid/lefthook": "^0.7.6",
@@ -14,10 +12,9 @@
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
-    "@rollup/plugin-typescript": "^8.2.5",
     "@rushstack/eslint-config": "^2.4.0",
     "@types/jest": "^27.0.0",
+    "@types/node": "^16.6.1",
     "babel-jest": "^27.0.6",
     "builtin-modules": "^3.2.0",
     "cross-env": "^7.0.3",
@@ -29,7 +26,8 @@
     "prettier": "2.3.2",
     "rimraf": "^3.0.2",
     "rollup": "^2.56.0",
-    "tslib": "^2.3.0",
+    "rollup-plugin-ts": "^1.4.0",
+    "tslib": "^2.3.1",
     "typescript": "~4.3.5"
   },
   "engines": {
@@ -67,6 +65,6 @@
     "test:dist": "jest --config scripts/jest/config.dist.js"
   },
   "sideEffects": false,
-  "types": "dist/source",
+  "types": "dist/index.d.ts",
   "version": "0.0.0-semantic-release"
 }

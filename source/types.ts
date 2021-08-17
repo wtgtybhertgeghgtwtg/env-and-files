@@ -37,7 +37,18 @@ export interface FileConfig<Value> extends BaseConfig<Value> {
    * The encoding of the file containing the secret.
    * @defaultValue 'utf8'
    */
-  encoding?: BufferEncoding;
+  encoding?:
+    | 'ascii'
+    | 'utf8'
+    | 'utf-8'
+    | 'utf16le'
+    | 'ucs2'
+    | 'ucs-2'
+    | 'base64'
+    | 'base64url'
+    | 'latin1'
+    | 'binary'
+    | 'hex';
 
   /**
    * The path to the file containing the secret.
