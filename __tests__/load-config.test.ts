@@ -12,7 +12,7 @@ describe('loadConfig', () => {
 
   describe('invariants', () => {
     it('rejects if a property config of "configMap" has neither "filePath" nor "variableName".', async () => {
-      // @ts-expect-error-ignore
+      // @ts-expect-error
       await expect(loadConfig({property: {}})).rejects.toThrow(
         '"configMap.property" must be a string, EnvironmentConfig object, or FileConfig object.  Neither "filePath" nor "variableName" are defined.',
       );
@@ -210,7 +210,7 @@ describe('loadConfig', () => {
       const fileContent = 'The content of this file.';
 
       it('equals the file content decoded as UTF-8 if no encoding is defined.', async () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const config = await loadConfig({
@@ -222,7 +222,7 @@ describe('loadConfig', () => {
       });
 
       it('equals the file content decoded using the given encoding, if defined.', async () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'ascii')});
 
         const config = await loadConfig({
@@ -235,7 +235,7 @@ describe('loadConfig', () => {
       });
 
       it('does not use the default value.', async () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const defaultValue = 'SOMETHING_ELSE';
@@ -250,7 +250,7 @@ describe('loadConfig', () => {
       });
 
       it('is passed to the formatter.', async () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const formatter = jest.fn();
@@ -266,7 +266,7 @@ describe('loadConfig', () => {
 
     describe('when the file is not present', () => {
       beforeEach(() => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({});
       });
 
@@ -378,7 +378,7 @@ describe('loadConfig', () => {
 
     beforeEach(() => {
       process.env[variableName] = variableValue;
-      // @ts-expect-error-ignore
+      // @ts-expect-error
       fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
     });
 
@@ -482,7 +482,7 @@ describe('loading errors', () => {
 
   it('stringifies to include all messages.', async () => {
     delete process.env[variableName];
-    // @ts-expect-error-ignore
+    // @ts-expect-error
     fs._setFiles({});
 
     try {

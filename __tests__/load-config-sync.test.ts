@@ -210,7 +210,7 @@ describe('loadConfig', () => {
       const fileContent = 'The content of this file.';
 
       it('equals the file content decoded as UTF-8 if no encoding is defined.', () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const config = loadConfigSync({
@@ -222,7 +222,7 @@ describe('loadConfig', () => {
       });
 
       it('equals the file content decoded using the given encoding, if defined.', () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'ascii')});
 
         const config = loadConfigSync({
@@ -235,7 +235,7 @@ describe('loadConfig', () => {
       });
 
       it('does not use the default value.', () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const defaultValue = 'SOMETHING_ELSE';
@@ -250,7 +250,7 @@ describe('loadConfig', () => {
       });
 
       it('is passed to the formatter.', () => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
 
         const formatter = jest.fn();
@@ -266,7 +266,7 @@ describe('loadConfig', () => {
 
     describe('when the file is not present', () => {
       beforeEach(() => {
-        // @ts-expect-error-ignore
+        // @ts-expect-error
         fs._setFiles({});
       });
 
@@ -378,7 +378,7 @@ describe('loadConfig', () => {
 
     beforeEach(() => {
       process.env[variableName] = variableValue;
-      // @ts-expect-error-ignore
+      // @ts-expect-error
       fs._setFiles({[filePath]: Buffer.from(fileContent, 'utf8')});
     });
 
@@ -481,7 +481,7 @@ describe('loadConfig', () => {
 
     beforeEach(() => {
       delete process.env[variableName];
-      // @ts-expect-error-ignore
+      // @ts-expect-error
       fs._setFiles({});
     });
 
