@@ -86,6 +86,22 @@ export interface PropertyResult<Value> {
 }
 
 /**
+ * Unwrap a config map to its resultant config.
+ *
+ * @typeParam ConfigMap - Type of the config map that will be passed to `loadConfig` or `loadConfigSync`.
+ *
+ * @remarks
+ *
+ * This type is exported for consumer use (e.g. a function that calls `load-config-sync` and returns the result), but is not actually used in this library.
+ * While the implementation is identical to the return type of `load-config-sync` (or `load-config` but without the Promise), this type is not used there.
+ * Currently, TypeScript, at least in VSCode, does not evaluate user-defined type aliases on hover, leading to a less clear user experience.
+ * If this behavior is changed, this type should replace the inline implementations.
+ */
+export type UnwrapConfigMap<
+  ConfigMap extends Record<string, PropertyConfig<unknown>>,
+> = {[key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>};
+
+/**
  * Unwrap a property config to its resultant value.
  */
 export type UnwrapPropertyConfig<PConfig extends PropertyConfig<unknown>> =
