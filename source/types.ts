@@ -33,6 +33,7 @@ export interface EnvironmentConfig<Value> extends BaseConfig<Value> {
  * Configuration for a property loaded from a secret.
  */
 export interface FileConfig<Value> extends BaseConfig<Value> {
+  /* eslint-disable unicorn/text-encoding-identifier-case  -- Values that would upset this rule are still valid. */
   /**
    * The encoding of the file containing the secret.
    * @defaultValue 'utf8'
@@ -49,6 +50,7 @@ export interface FileConfig<Value> extends BaseConfig<Value> {
     | 'latin1'
     | 'binary'
     | 'hex';
+  /* eslint-enable unicorn/text-encoding-identifier-case */
 
   /**
    * The path to the file containing the secret.
