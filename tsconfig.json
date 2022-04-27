@@ -8,7 +8,7 @@
     "lib": ["ES2019"],
     "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "dist",
+    "outDir": "distribution",
     "resolveJsonModule": true,
     "rootDir": ".",
     "strict": true,

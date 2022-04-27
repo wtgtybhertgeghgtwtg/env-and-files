@@ -50,7 +50,7 @@ jobs:
       - run: yarn test:source
     working_directory: ~/repo
 
-  test-dist:
+  test-distribution:
     docker:
       - image: circleci/node:12
     steps:
@@ -65,7 +65,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
-      - run: yarn test:dist
+      - run: yarn test:distribution
     working_directory: ~/repo
 
 version: 2
@@ -75,7 +75,7 @@ workflows:
     jobs:
       - lint
       - test
-      - test-dist
+      - test-distribution
       - release:
           filters:
             branches:
@@ -83,5 +83,5 @@ workflows:
           requires:
             - lint
             - test
-            - test-dist
+            - test-distribution
   version: 2
