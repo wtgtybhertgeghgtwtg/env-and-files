@@ -13,14 +13,14 @@
     "@commitlint/cli": "^16.0.0",
     "@commitlint/config-conventional": "^16.0.0",
     "@rushstack/eslint-config": "^2.5.0",
-    "@types/jest": "^27.0.0",
+    "@types/jest": "^27.4.1",
     "@types/node": "^16.6.1",
-    "babel-jest": "^27.0.6",
+    "babel-jest": "^28.0.2",
     "builtin-modules": "^3.2.0",
     "eslint": "^8.4.1",
     "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-unicorn": "^41.0.0",
-    "jest": "^27.0.6",
+    "eslint-plugin-unicorn": "^42.0.0",
+    "jest": "^28.0.2",
     "map-to-map": "^2.0.0",
     "prettier": "2.6.2",
     "rimraf": "^3.0.2",
@@ -32,7 +32,7 @@
     "node": ">=12"
   },
   "files": [
-    "dist",
+    "distribution",
     "source"
   ],
   "keywords": [
@@ -50,19 +50,19 @@
     "variables"
   ],
   "license": "MIT",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.es.js",
+  "main": "distribution/index.cjs.js",
+  "module": "distribution/index.es.js",
   "name": "env-and-files",
   "repository": "wtgtybhertgeghgtwtg/env-and-files",
   "scripts": {
     "build": "rollup -c",
-    "clean": "rimraf coverage dist",
+    "clean": "rimraf coverage distribution",
     "lint": "tsc && eslint . && prettier --l \"{__mocks__,__tests__,source}/**/*.ts\"",
-    "test": "yarn test:source && yarn build && yarn test:dist",
+    "test": "yarn test:source && yarn build && yarn test:distribution",
     "test:source": "jest --config scripts/jest/config.source.js",
-    "test:dist": "jest --config scripts/jest/config.dist.js"
+    "test:distribution": "jest --config scripts/jest/config.distribution.js"
   },
   "sideEffects": false,
-  "types": "dist/index.d.ts",
+  "types": "distribution/index.d.ts",
   "version": "0.0.0-semantic-release"
 }

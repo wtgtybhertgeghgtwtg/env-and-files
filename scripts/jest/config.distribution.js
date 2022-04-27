@@ -2,5 +2,5 @@ const sourceConfig = require('./config.source');
 
 module.exports = {
   ...sourceConfig,
-  moduleNameMapper: {'^../source$': '<rootDir>/dist/index.cjs'},
+  moduleNameMapper: {'^../source$': '<rootDir>/distribution/index.cjs'},
 };

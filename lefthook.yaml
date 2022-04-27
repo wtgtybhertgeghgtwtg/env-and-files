@@ -19,4 +19,4 @@ pre-commit:
       run: 'prettier --write {staged_files} && git add {staged_files}'
     test:
       glob: '*.{js,ts}'
-      run: 'jest --config ./scripts/jest/config.source.js --bail --findRelatedTests {staged_files}'
+      run: 'jest  --bail --config ./scripts/jest/config.source.js --findRelatedTests {staged_files} --passWithNoTests'
