@@ -1,6 +1,6 @@
-jest.mock('fs');
+jest.mock('fs/promises');
 
-import fs from 'fs';
+import fs from 'fs/promises';
 import {ConfigError, loadConfig} from '../source';
 
 describe('loadConfig', () => {

@@ -1,4 +1,4 @@
-import builtinModules from 'builtin-modules';
+import {builtinModules} from 'module';
 import ts from 'rollup-plugin-ts';
 import {fileURLToPath} from 'url';
 import packageJson from './package.json';

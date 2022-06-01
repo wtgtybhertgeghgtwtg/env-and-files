@@ -6,7 +6,7 @@ function _setFiles(newFiles: {[path: string]: Buffer}): void {
   files = mapToMap(newFiles);
 }
 
-const readFileSync = jest.fn((path: string, encoding: BufferEncoding) => {
+const readFile = jest.fn(async (path: string, encoding: BufferEncoding) => {
   const file = files.get(path);
   if (file && Buffer.isBuffer(file)) {
     return file.toString(encoding);
@@ -16,5 +16,5 @@ const readFileSync = jest.fn((path: string, encoding: BufferEncoding) => {
 
 module.exports = {
   _setFiles,
-  readFileSync,
+  readFile,
 };

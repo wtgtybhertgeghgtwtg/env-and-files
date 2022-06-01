@@ -1,7 +1,7 @@
 jobs:
   lint:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -18,7 +18,7 @@ jobs:
 
   release:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -31,11 +31,11 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
-      - run: npx semantic-release@17
+      - run: npx semantic-release
 
   test:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:
@@ -52,7 +52,7 @@ jobs:
 
   test-distribution:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
     steps:
       - checkout
       - restore_cache:

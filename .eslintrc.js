@@ -45,7 +45,7 @@ module.exports = {
       },
     },
     {
-      files: ['__mocks__/*.ts', 'scripts/jest/*.js', '.eslintrc.js'],
+      files: ['__mocks__/**/*.ts', 'scripts/jest/*.js', '.eslintrc.js'],
       rules: {
         // Mocks and some configuration files cannot be modules.
         'unicorn/prefer-module': 'off',
