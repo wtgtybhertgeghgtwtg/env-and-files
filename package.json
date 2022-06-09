@@ -6,12 +6,12 @@
   "dependencies": {},
   "description": "Load configuration from environmental variables and files.",
   "devDependencies": {
-    "@arkweid/lefthook": "^0.7.6",
     "@babel/core": "^7.15.0",
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-typescript": "^7.15.0",
     "@commitlint/cli": "^17.0.1",
     "@commitlint/config-conventional": "^17.0.0",
+    "@evilmartians/lefthook": "^0.8.0",
     "@rushstack/eslint-config": "^2.5.0",
     "@types/jest": "^28.0.0",
     "@types/node": "^16.6.1",
