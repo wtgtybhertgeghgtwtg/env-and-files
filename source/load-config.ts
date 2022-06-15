@@ -42,7 +42,7 @@ export default async function loadConfig<
     Object.entries(configMap).map(async ([propertyName, propertyConfig]) => {
       const {error, value} = await loadProperty(propertyConfig, propertyName);
       if (error !== false) {
-        errorMap.set(propertyName as string, error);
+        errorMap.set(propertyName, error);
       }
 
       return [propertyName, value];
