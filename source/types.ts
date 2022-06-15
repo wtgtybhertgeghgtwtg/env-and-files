@@ -107,14 +107,8 @@ export type UnwrapConfigMap<
  * Unwrap a property config to its resultant value.
  */
 export type UnwrapPropertyConfig<PConfig extends PropertyConfig<unknown>> =
-  PConfig extends string
-    ? string
-    : PConfig extends {required: false}
-    ? UnwrapResult<PConfig> | undefined
-    : UnwrapResult<PConfig>;
-
-/**
- * Unwrap a result to its value.
- */
-type UnwrapResult<PConfig extends PropertyConfig<unknown>> =
-  PConfig extends BaseConfig<infer Value> ? Value : string;
+  PConfig extends BaseConfig<infer Value>
+    ? PConfig extends {required: false}
+      ? Value | undefined
+      : Value
+    : string;

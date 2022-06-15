@@ -1,6 +1,6 @@
 import ConfigError from './config-error';
 import loadPropertySync from './load-property-sync';
-import {PropertyConfig, UnwrapPropertyConfig} from './types';
+import {PropertyConfig, UnwrapConfigMap, UnwrapPropertyConfig} from './types';
 
 /**
  * Load configuration synchronously.
@@ -38,18 +38,14 @@ export default function loadConfigSync<
   configMap: ConfigMap,
 ): {[key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>} {
   const errorMap = new Map<string, Error>();
-  const result = {} as {
-    [key in keyof ConfigMap]: UnwrapPropertyConfig<ConfigMap[key]>;
-  };
-  for (const [propertyName, propertyConfig] of Object.entries(configMap) as [
-    string & keyof ConfigMap,
-    ConfigMap[keyof ConfigMap],
-  ][]) {
+  const result = {} as UnwrapConfigMap<ConfigMap>;
+  for (const [propertyName, propertyConfig] of Object.entries(configMap)) {
     const {error, value} = loadPropertySync(propertyConfig, propertyName);
     if (error !== false) {
       errorMap.set(propertyName, error);
     }
-    result[propertyName] = value as UnwrapPropertyConfig<
+
+    result[propertyName as keyof ConfigMap] = value as UnwrapPropertyConfig<
       ConfigMap[keyof ConfigMap]
     >;
   }

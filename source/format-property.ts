@@ -26,9 +26,6 @@ export default function formatProperty<Value>(
   }
 
   return hasValue && hasFormat
-    ? tryToFormat(
-        propertyResult.value as string,
-        format as PropertyFormatter<Value>,
-      )
+    ? tryToFormat(propertyResult.value as string, format)
     : {error: false, value: defaultValue};
 }

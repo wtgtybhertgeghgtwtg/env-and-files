@@ -32,11 +32,14 @@ export default class ConfigError<
    * This is here so the ConfigError can be stringified a little cleaner.  Throwing it'll still just show the base message.
    * @returns An object containing the message of this error and the messages of the errors it represents.
    */
-  public toJSON(): {errors: {[name: string]: string}; message: string} {
+  public toJSON(): {
+    errors: {[key in keyof ErrorMap]: string};
+    message: string;
+  } {
     return {
       errors: Object.fromEntries(
         Object.entries(this.errors).map(([key, {message}]) => [key, message]),
-      ),
+      ) as {[key in keyof ErrorMap]: string},
       message: this.message,
     };
   }

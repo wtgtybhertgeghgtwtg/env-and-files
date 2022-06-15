@@ -9,7 +9,7 @@ export default function loadEnvironmentProperty<Value>(
   return formatProperty(
     {
       error:
-        typeof value !== 'string' &&
+        typeof value === 'undefined' &&
         new Error(`${variableName} is not defined.`),
       value,
     },
