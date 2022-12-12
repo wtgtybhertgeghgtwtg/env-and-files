@@ -49,6 +49,7 @@ module.exports = {
       rules: {
         // Mocks and some configuration files cannot be modules.
         'unicorn/prefer-module': 'off',
+        'unicorn/prefer-top-level-await': 'off',
       },
     },
   ],
@@ -61,6 +62,8 @@ module.exports = {
     'unicorn/import-style': 'off',
     // Since this is covered by 'eslint-comments/no-unlimited-disable'.
     'unicorn/no-abusive-eslint-disable': 'off',
+    // The idea is that other development-time checks would tell you if you're referencing an undefined variable, so it won't run if you access it for this comparison.  But I'd rather just avoid that risk altogether.
+    'unicorn/no-typeof-undefined': 'off',
     'unicorn/no-unsafe-regex': 'error',
     // Does not work with TypeScript and is not backported to all supported versions of Node.
     'unicorn/prefer-node-protocol': 'off',
