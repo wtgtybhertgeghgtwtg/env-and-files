@@ -31,7 +31,7 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
       - run: yarn build
-      - run: npx semantic-release
+      - run: npx semantic-release@19.0.5
 
   test:
     docker:
